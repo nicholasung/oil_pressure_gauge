@@ -10,7 +10,7 @@ float currentAng; //angle to draw the needle in degrees
 lv_color_t UIColour; //current colour to draw the ui in 
 
 //Sensor Info
-int sensorType = 1; // 0 reads internal accel for the orientation, 1 reads defined analog pin
+int sensorType = 0; // 0 reads internal accel for the orientation, 1 reads defined analog pin
 int analogPin = 15;
 float maxVReadout = 0.9; // max expected voltage as a percentage of input voltage
 
