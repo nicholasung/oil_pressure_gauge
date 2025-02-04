@@ -2,9 +2,14 @@
 #include <CST816S.h>
 #include <lib_cfgs/CST816S_pin_config.h>
 #include <lvgl.h>
+#include "SensorQMI8658.hpp"
+#include "./sensors.h"
+#include"./globals.h"
 #if LV_USE_TFT_ESPI
 #include <TFT_eSPI.h>
 #endif
+
+
 
 CST816S touch(TOUCH_SDA, TOUCH_SCL, TOUCH_RST, TOUCH_IRQ);
 
@@ -60,11 +65,13 @@ void setup(){
     lv_obj_align( label, LV_ALIGN_CENTER, 0, 0 );
 
     Serial.println("END SETUP");
+    sensorInit();
     loop();
 }
 
 void loop(){
     lv_timer_handler();
     delay(5); 
-    Serial.println("Looping");
+    sensorRead();
+    // Serial.println("Looping");
 }
