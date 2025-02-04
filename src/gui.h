@@ -2,3 +2,4 @@
 
 void drawDial();
 void bootAnimation();
+void guiInit();

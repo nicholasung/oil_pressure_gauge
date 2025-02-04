@@ -35,7 +35,7 @@ extern float gradThreshold; //percentage below max to start shifting colours
 extern float warnThreshold; //percentage below max to show max warning
 
 //UI Settings
-extern char * unit; //units
+extern char * unitLabel; //units
 extern float maxAngle; // min and max angle for the needle
 extern float minAngle; // 
 extern lv_color_t backgroundColour; //background colour in hex (#rrggbb)

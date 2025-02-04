@@ -5,10 +5,18 @@
 #include <vector>
 #include "SensorQMI8658.hpp"
 
+//UI Settings
+char * unitLabel = "Deg"; //units
+float maxAngle = 315; // min and max angle for the needle
+float minAngle = 45; // 
+lv_color_t backgroundColour = lv_color_hex(0x000000); //background colour in hex (#rrggbb)
+lv_color_t defaultColour = lv_color_hex(0xFFFFFF); //default colour to draw ui in
+int readoutDeci = 0;
+
 //Global Access
 float currentVal;
 float currentAng; //angle to draw the needle in degrees
-lv_color_t UIColour; //current colour to draw the ui in 
+lv_color_t UIColour = defaultColour; //current colour to draw the ui in 
 bool bootPlayed = false;
 
 //Sensor Info
@@ -32,14 +40,6 @@ IMUdata gyr;
 bool dynamicMax = 0;
 float gradThreshold = 0.5; //percentage below max to start shifting colours
 float warnThreshold = 0.7; //percentage below max to show max warning
-
-//UI Settings
-char * unit; //units
-float maxAngle = 315; // min and max angle for the needle
-float minAngle = 45; // 
-lv_color_t backgroundColour = lv_color_hex(0x000000); //background colour in hex (#rrggbb)
-lv_color_t defaultColour = lv_color_hex(0xFFFFFF); //default colour to draw ui in
-int readoutDeci = 0;
 
     // Big Ticks
 int numBoldTicks = 5;
