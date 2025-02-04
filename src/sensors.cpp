@@ -54,7 +54,7 @@ float sensorRead(){
             // Serial.println(analogRead(15));
         }
     } else if (sensorType == 1) {
-        float val = analogRead(15)
+        float val = analogRead(15);
         Serial.println(val);
         currentAng = (val/4095) * 360;
     }
