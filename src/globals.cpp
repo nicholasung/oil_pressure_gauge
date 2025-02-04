@@ -9,6 +9,7 @@
 float currentVal;
 float currentAng; //angle to draw the needle in degrees
 lv_color_t UIColour; //current colour to draw the ui in 
+bool bootPlayed = false;
 
 //Sensor Info
 int sensorType = 0; // 0 reads internal accel for the orientation, 1 reads defined analog pin
@@ -54,9 +55,11 @@ int decimals = 0;
 bool smallTickLabels = 1; //do we want these
 
 //screen objects
+lv_obj_t *screen;
 lv_obj_t *readout;
 lv_obj_t *units;
 lv_obj_t *needle;
+lv_point_precise_t needle_coords[2];
 std::vector<lv_obj_t*> bigTicks(numBoldTicks); 
 std::vector<lv_obj_t*> smallTicks(totalSmallTicks); 
 

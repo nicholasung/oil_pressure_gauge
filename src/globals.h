@@ -12,6 +12,7 @@
 extern float currentVal;
 extern float currentAng; //angle to draw the needle in degrees
 extern lv_color_t UIColour; //current colour to draw the ui in 
+extern bool bootPlayed;
 
 //Sensor Info
 extern int sensorType; // 0 reads internal accel for the orientation, 1 reads defined analog pin
@@ -48,16 +49,19 @@ extern int boldTicksLength;
 
 //Small Ticks
 extern int numTicks; //Number per sector between bold ticks (if you only want small ticks just use big ticks to 2 for min and max and set this to number between desired)
+extern int totalSmallTicks;
 extern int tickLabelOffset;
 extern int tickLength;
 extern int decimals;
 extern bool smallTickLabels; //do we want these
 
 //screen objects
+extern lv_obj_t *screen;
 extern lv_obj_t *readout;
 extern lv_obj_t *units;
 extern lv_obj_t *needle;
-extern std::vector<lv_obj_t*> bigTicks(numBoldTicks); 
-extern std::vector<lv_obj_t*> smallTicks(totalSmallTicks);
+extern lv_point_precise_t needle_coords[2];
+extern std::vector<lv_obj_t*> bigTicks; 
+extern std::vector<lv_obj_t*> smallTicks;
 
 

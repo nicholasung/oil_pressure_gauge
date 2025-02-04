@@ -11,6 +11,10 @@
 #endif
 
 extern lv_obj_t *readout;
+extern lv_color_t backgroundColour;
+extern lv_obj_t *screen;
+extern bool bootPlayed;
+
 
 CST816S touch(TOUCH_SDA, TOUCH_SCL, TOUCH_RST, TOUCH_IRQ);
 
@@ -60,21 +64,46 @@ void setup(){
     lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER); /*Touchpad should have POINTER type*/
     lv_indev_set_read_cb(indev, lv_touch_read);
 
-    //BOOT ANIMATION
+    // Set the background color
+    screen = lv_scr_act();
+    lv_obj_set_style_bg_color(screen, backgroundColour, LV_PART_MAIN);
+
+    //GUI INIT ANIMATION
     readout = lv_label_create( lv_screen_active() );
-    lv_label_set_text( readout, "my damn balls itch" );
+    lv_label_set_text( readout, "Boot Screen" );
     lv_obj_align( readout, LV_ALIGN_CENTER, 0, 0 );
-    
+    lv_obj_set_style_text_color(readout, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+
+    needle_coords[0].x = TFT_HOR_RES/2; //centre
+    needle_coords[0].y = TFT_VER_RES/2; 
+    needle_coords[1].x = needle_coords[0].x;
+    needle_coords[1].y = needle_coords[0].y;
+
+    needle = lv_line_create(lv_scr_act());
+    lv_line_set_points(needle, needle_coords, 2); // Set the points
+    lv_obj_align(needle, LV_ALIGN_OUT_TOP_LEFT, 0, 0); // Align the line to the center of the screen
+
+    // Set the style of the needle
+    lv_obj_set_style_line_width(needle, 2, LV_PART_MAIN);
+    lv_obj_set_style_line_color(needle, lv_color_hex(0xFF0000), LV_PART_MAIN); // Red color
+
     Serial.println("END SETUP");
     sensorInit();
     loop();
 }
 
+
+
 void loop(){
-    
     lv_timer_handler();
     delay(5); 
-    sensorRead();
-    drawDial();
+    // Boot animation
+    if (!bootPlayed) {
+        bootAnimation();
+    } else {
+        // Normal operation after boot animation
+        sensorRead();
+        drawDial();
+    }
     // Serial.println("Looping");
 }
