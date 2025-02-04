@@ -2,6 +2,7 @@
 #include <CST816S.h>
 #include <lib_cfgs/CST816S_pin_config.h>
 #include <lvgl.h>
+#include <vector>
 #include "SensorQMI8658.hpp"
 
 //Global Access
@@ -46,6 +47,7 @@ int boldTicksLength = 24;
 
     //Small Ticks
 int numTicks = 3; //Number per sector between bold ticks (if you only want small ticks just use big ticks to 2 for min and max and set this to number between desired)
+int totalSmallTicks = (numBoldTicks-1)*numTicks;
 int tickLabelOffset = 20;
 int tickLength = 10;
 int decimals = 0;
@@ -53,4 +55,8 @@ bool smallTickLabels = 1; //do we want these
 
 //screen objects
 lv_obj_t *readout;
+lv_obj_t *units;
+lv_obj_t *needle;
+std::vector<lv_obj_t*> bigTicks(numBoldTicks); 
+std::vector<lv_obj_t*> smallTicks(totalSmallTicks); 
 

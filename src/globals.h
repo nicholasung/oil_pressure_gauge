@@ -55,5 +55,9 @@ extern bool smallTickLabels; //do we want these
 
 //screen objects
 extern lv_obj_t *readout;
+extern lv_obj_t *units;
+extern lv_obj_t *needle;
+extern std::vector<lv_obj_t*> bigTicks(numBoldTicks); 
+extern std::vector<lv_obj_t*> smallTicks(totalSmallTicks);
 
 
