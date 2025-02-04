@@ -51,4 +51,6 @@ int tickLength = 10;
 int decimals = 0;
 bool smallTickLabels = 1; //do we want these
 
+//screen objects
+lv_obj_t *readout;
 

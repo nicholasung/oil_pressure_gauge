@@ -4,6 +4,10 @@
 #include <lvgl.h>
 #include "SensorQMI8658.hpp"
 
+#ifndef M_PI
+#define M_PI (3.14159265358979323846f)
+#endif
+
 //Global Access
 extern float currentVal;
 extern float currentAng; //angle to draw the needle in degrees
@@ -48,5 +52,8 @@ extern int tickLabelOffset;
 extern int tickLength;
 extern int decimals;
 extern bool smallTickLabels; //do we want these
+
+//screen objects
+extern lv_obj_t *readout;
 
 

@@ -5,11 +5,12 @@
 #include "SensorQMI8658.hpp"
 #include "./sensors.h"
 #include"./globals.h"
+#include "./gui.h"
 #if LV_USE_TFT_ESPI
 #include <TFT_eSPI.h>
 #endif
 
-
+extern lv_obj_t *readout;
 
 CST816S touch(TOUCH_SDA, TOUCH_SCL, TOUCH_RST, TOUCH_IRQ);
 
@@ -60,18 +61,20 @@ void setup(){
     lv_indev_set_read_cb(indev, lv_touch_read);
 
     //BOOT ANIMATION
-    lv_obj_t *label = lv_label_create( lv_screen_active() );
-    lv_label_set_text( label, "my damn balls itch" );
-    lv_obj_align( label, LV_ALIGN_CENTER, 0, 0 );
-
+    readout = lv_label_create( lv_screen_active() );
+    lv_label_set_text( readout, "my damn balls itch" );
+    lv_obj_align( readout, LV_ALIGN_CENTER, 0, 0 );
+    
     Serial.println("END SETUP");
     sensorInit();
     loop();
 }
 
 void loop(){
+    
     lv_timer_handler();
     delay(5); 
     sensorRead();
+    drawDial();
     // Serial.println("Looping");
 }
