@@ -24,7 +24,7 @@ int sensorType = 1; // 0 reads internal accel for the orientation, 1 reads defin
 int analogPin = 15;
 float maxVReadout = 0.9; // max expected voltage as a percentage of input voltage
 
-float maxVal = 4095; //Min and Max expected readouts from sensor
+float maxVal = 360; //Min and Max expected readouts from sensor
 float minVal = 0; 
 
 //QMI8658 Access
@@ -37,7 +37,7 @@ IMUdata gyr;
 
 
 //General Settings
-bool dynamicMax = 0;
+bool dynamicMax = 1;
 float gradThreshold = 0.5; //percentage below max to start shifting colours
 float warnThreshold = 0.7; //percentage below max to show max warning
 

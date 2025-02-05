@@ -3,3 +3,4 @@
 void drawDial();
 void bootAnimation();
 void guiInit();
+void updateLabels();

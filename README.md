@@ -37,3 +37,6 @@ TFT_eSPI_Setups (from waveshare demo)
 
 ### PSI sensor reference formula
 ![alt text](./README_assets//pressure.png)
+
+### KNOWN BUGS
+- When small tick labels have 4 characters drawn a grey line gets drawn to the bottom of the screen

@@ -11,6 +11,9 @@
 #endif
 
 extern bool bootPlayed;
+extern bool dynamicMax;
+extern float maxVal;
+extern float currentVal;
 
 
 CST816S touch(TOUCH_SDA, TOUCH_SCL, TOUCH_RST, TOUCH_IRQ);
@@ -77,9 +80,13 @@ void loop(){
     if (!bootPlayed) {
         bootAnimation();
     } else {
-        // Normal operation after boot animation
+        if(dynamicMax){
+            if(currentVal > maxVal) maxVal = currentVal;
+            // updateLabels();
+        }
+        
         sensorRead();
         drawDial();
     }
-    // Serial.println("Looping");
+    
 }

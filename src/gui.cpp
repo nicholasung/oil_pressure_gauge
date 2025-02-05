@@ -86,14 +86,13 @@ void drawTicks(){
         tickLabel = lv_label_create( lv_screen_active() );
         label = minVal + i*bold_label_incr;
 
-        std::ostringstream labelStream;
-        labelStream.precision(0); // Set the number of decimal points
-        labelStream << std::fixed << label;
-        std::string labelStr = labelStream.str();
+        buffer[8]; // Buffer to hold the formatted string
+        sprintf(buffer, "%.0f", label); 
+        lv_label_set_text(tickLabel, buffer);
 
         std::pair<int, int> label_coords = tickLabelCoord(bigTicksCoords[i]);
 
-        lv_label_set_text(tickLabel, labelStr.c_str());
+        lv_label_set_text(tickLabel, buffer);
         lv_obj_align( tickLabel, LV_ALIGN_OUT_TOP_LEFT, label_coords.first, label_coords.second);
         lv_obj_set_style_text_color(tickLabel, UIColour, LV_PART_MAIN);
     }
@@ -124,14 +123,13 @@ void drawTicks(){
                 tickLabel = lv_label_create( lv_screen_active() );
                 label = minVal + i*small_label_incr+small_label_incr*(n-1)*(numTicks+1);
 
-                std::ostringstream labelStream;
-                labelStream.precision(decimals); // Set the number of decimal points
-                labelStream << std::fixed << label;
-                std::string labelStr = labelStream.str();
+                buffer[5]; // Buffer to hold the formatted string 
+                sprintf(buffer, "%.0f", label); // Convert float to string with 2 decimal places
+                lv_label_set_text(tickLabel, buffer);
 
                 std::pair<int, int> label_coords = tickLabelCoord(smallTicksCoords[index]);
 
-                lv_label_set_text(tickLabel, labelStr.c_str());
+                lv_label_set_text(tickLabel, buffer);
                 lv_obj_align( tickLabel, LV_ALIGN_OUT_TOP_LEFT, label_coords.first, label_coords.second);
                 lv_obj_set_style_text_color(tickLabel, UIColour, LV_PART_MAIN);
             }
@@ -186,7 +184,7 @@ std::pair<int, int> degToCoords(float deg){ //takes an angle and gives coordinat
 
 void drawDial(){    
     //Draw Readout
-    buffer[10]; // Buffer to hold the formatted string
+    buffer[8]; // Buffer to hold the formatted string
     sprintf(buffer, "%.2f", currentVal); // Convert float to string with 2 decimal places
     lv_label_set_text(readout, buffer);
 
