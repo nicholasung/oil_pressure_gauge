@@ -83,23 +83,12 @@ void guiInit(){
         bigTicksCoords[i][0].y = coordinates.first.second;
         bigTicksCoords[i][1].x = coordinates.second.first;
         bigTicksCoords[i][1].y = coordinates.second.second;
-  
-        //text calcs
-        // int label = minVal + i*bold_label_incr;
-        // float dir_x = x_end - centre_x;
-        // float dir_y = y_end - centre_y;
-        // float length = sqrt(dir_x * dir_x + dir_y * dir_y);
-        // dir_x /= length;
-        // dir_y /= length;
-
-        // float x_text = x_start - dir_x * boldTickLabelOffset;
-        // float y_text = y_start - dir_y * (boldTickLabelOffset - font_offset);
 
         currTick = lv_line_create(lv_scr_act());
         lv_line_set_points(currTick, bigTicksCoords[i].data(), 2);
         lv_obj_align(currTick, LV_ALIGN_OUT_TOP_LEFT, 0, 0); 
         lv_obj_set_style_line_width(currTick, 2, LV_PART_MAIN);
-        lv_obj_set_style_line_color(currTick, UIColour, LV_PART_MAIN); // Red color
+        lv_obj_set_style_line_color(currTick, UIColour, LV_PART_MAIN);
     }
 
     float small_ang_incr = bold_ang_incr / (numTicks + 1);
