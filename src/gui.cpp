@@ -4,7 +4,23 @@
 #include "globals.h"
 #include <string>
 #include <sstream>
+#include <lvgl.h>
 
+
+// Declare the fonts
+LV_FONT_DECLARE(lv_font_montserrat_20);
+LV_FONT_DECLARE(lv_font_montserrat_12);
+LV_FONT_DECLARE(lv_font_montserrat_16);
+LV_FONT_DECLARE(lv_font_montserrat_14);
+
+// Styles for different font sizes
+static lv_style_t style_font_20;
+static lv_style_t style_font_12;
+static lv_style_t style_font_16;
+static lv_style_t style_font_14;
+
+extern int smallFontOffset;
+extern int bigFontOffset;
 extern float currentAng;
 extern lv_obj_t *readout;
 char buffer[10]; // Buffer to hold the formatted string
@@ -36,6 +52,44 @@ extern std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords;
 extern std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords;
 extern std::vector<std::string> bigTickStringLabels;
 extern std::vector<std::string> smallTickStringLabels;
+
+void initFontStyles() {
+    // Initialize style for font size 20
+    lv_style_init(&style_font_20);
+    lv_style_set_text_font(&style_font_20, &lv_font_montserrat_20);
+
+    // Initialize style for font size 12
+    lv_style_init(&style_font_12);
+    lv_style_set_text_font(&style_font_12, &lv_font_montserrat_12);
+
+    // Initialize style for font size 16
+    lv_style_init(&style_font_16);
+    lv_style_set_text_font(&style_font_16, &lv_font_montserrat_16);
+
+    // Initialize style for font size 14
+    lv_style_init(&style_font_14);
+    lv_style_set_text_font(&style_font_14, &lv_font_montserrat_14);
+}
+
+void applyFontStyle(lv_obj_t* label, int fontSize) {
+    switch (fontSize) {
+        case 20:
+            lv_obj_add_style(label, &style_font_20, LV_PART_MAIN);
+            break;
+        case 12:
+            lv_obj_add_style(label, &style_font_12, LV_PART_MAIN);
+            break;
+        case 16:
+            lv_obj_add_style(label, &style_font_16, LV_PART_MAIN);
+            break;
+        case 14:
+            lv_obj_add_style(label, &style_font_14, LV_PART_MAIN);
+            break;        
+        default:
+            // Handle default case or error
+            break;
+    }
+}
 
 std::pair<std::pair<float, float>, std::pair<float, float>> calculateTickCoordinates(float degrees, float radius, float centre_x, float centre_y, float tickLength) {
     float ang_rads = degrees * M_PI / 180;
@@ -90,7 +144,7 @@ void updateLabels() {
         for (int n = 1; n <= numBoldTicks - 1; n++) {
             for (int i = 1; i <= numTicks; i++) {
                 int index = (n - 1) * numTicks + i - 1;
-                label = minVal + (n * bold_label_incr) + (i * small_label_incr);
+                label = minVal + i*small_label_incr+small_label_incr*(n-1)*(numTicks+1);
                 sprintf(buffer, "%.0f", label);
                 smallTickStringLabels[index] = buffer;
 
@@ -111,7 +165,6 @@ void drawTicks(){
     float bold_ang_incr = (maxAngle - minAngle) / (numBoldTicks - 1);
     float bold_label_incr = (maxVal - minVal) / (numBoldTicks - 1); //the - 1 on these calulcations is a dirty quick fix
     float label;
-    int bigFontOffset = 0;
     for(int i = 0; i < numBoldTicks; i++){
         lv_obj_t* currTick = bigTicks[i];
         lv_obj_t* tickLabel = bigTickLabels[i];
@@ -139,9 +192,18 @@ void drawTicks(){
         
         std::pair<int, int> label_coords = tickLabelCoord(bigTicksCoords[i]);
 
+        lv_coord_t label_width = lv_obj_get_width(tickLabel);
+        lv_coord_t label_height = lv_obj_get_height(tickLabel);
+
+        // Adjust the coordinates to center the label
+        int adjusted_x = label_coords.first - (label_width / 2);
+        int adjusted_y = label_coords.second - (label_height / 2);
+
         lv_label_set_text(tickLabel, buffer);
-        lv_obj_align( tickLabel, LV_ALIGN_OUT_TOP_LEFT, label_coords.first, label_coords.second);
+        lv_obj_align(tickLabel, LV_ALIGN_OUT_TOP_LEFT, adjusted_x - 3*bigFontOffset, adjusted_y - 2*bigFontOffset);
+
         lv_obj_set_style_text_color(tickLabel, UIColour, LV_PART_MAIN);
+        applyFontStyle(tickLabel, 14);
         bigTickLabels[i] = tickLabel;
     }
 
@@ -149,7 +211,6 @@ void drawTicks(){
     float small_label_incr; 
     if(smallTickLabel == 1) small_label_incr = (maxVal - minVal) / ((numTicks+1)*(numBoldTicks-1)); 
     float base_ang = minAngle;
-    int smallFontOffset = 0;
     for(int n = 1; n <= numBoldTicks - 1; n++){
         for(int i = 1; i <= numTicks; i++){
             int index = (n - 1) * numTicks + i - 1;
@@ -178,8 +239,19 @@ void drawTicks(){
                 std::pair<int, int> label_coords = tickLabelCoord(smallTicksCoords[index]);
 
                 lv_label_set_text(tickLabel, buffer);
-                lv_obj_align( tickLabel, LV_ALIGN_OUT_TOP_LEFT, label_coords.first, label_coords.second);
+
+                lv_coord_t label_width = lv_obj_get_width(tickLabel);
+                lv_coord_t label_height = lv_obj_get_height(tickLabel);
+
+                // Adjust the coordinates to center the label
+                int adjusted_x = label_coords.first - (label_width / 2);
+                int adjusted_y = label_coords.second - (label_height / 2);
+
+                lv_label_set_text(tickLabel, buffer);
+                lv_obj_align(tickLabel, LV_ALIGN_OUT_TOP_LEFT, adjusted_x - 4*smallFontOffset , adjusted_y - 3*smallFontOffset);
+
                 lv_obj_set_style_text_color(tickLabel, UIColour, LV_PART_MAIN);
+                applyFontStyle(tickLabel, 12);
                 smallTickLabels[index] = tickLabel;
             }
 
@@ -190,19 +262,22 @@ void drawTicks(){
 
 void guiInit(){
     // Set the background color
+    initFontStyles();
     screen = lv_scr_act();
     lv_obj_set_style_bg_color(screen, backgroundColour, LV_PART_MAIN);
 
     //GUI INIT
     readout = lv_label_create( lv_screen_active() );
     lv_label_set_text( readout, "Welcome" );
-    lv_obj_align( readout, LV_ALIGN_CENTER, 0, 20 );
+    lv_obj_align( readout, LV_ALIGN_CENTER, 0, 80);
     lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
-
+    applyFontStyle(readout, 20);
+    
     units = lv_label_create( lv_screen_active() );
     lv_label_set_text( units, unitLabel);
-    lv_obj_align( units, LV_ALIGN_CENTER, 0, 40 );
-    lv_obj_set_style_text_color(units, UIColour, LV_PART_MAIN);
+    lv_obj_align( units, LV_ALIGN_CENTER, 0, 60);
+    lv_obj_set_style_text_color(units, backgroundColour , LV_PART_MAIN);
+    applyFontStyle(units, 12);
 
     needle_coords[0].x = LV_HOR_RES/2; //centre
     needle_coords[0].y = LV_VER_RES/2; 
@@ -250,7 +325,8 @@ void drawDial(){
     //set needle direction
     std::pair coords = degToCoords(currentAng);
     needle_coords[1].x = coords.first;
-    needle_coords[1].y = coords.second;    
+    needle_coords[1].y = coords.second;  
+    lv_obj_move_foreground(needle);  
 }
 
 void bootAnimation(){
@@ -268,6 +344,7 @@ void bootAnimation(){
         reverse = true;
     } else if (reverse && animation_angle <= 0){
         bootPlayed = true;
+        lv_obj_set_style_text_color(units, UIColour , LV_PART_MAIN);
         //somehow transition to the real value
         return;
     }

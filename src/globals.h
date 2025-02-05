@@ -47,13 +47,14 @@ extern int readoutDeci;
 extern int numBoldTicks;
 extern int boldTickLabelOffset;
 extern int boldTicksLength;
+extern int bigFontOffset;
 
 //Small Ticks
 extern int numTicks; //Number per sector between bold ticks (if you only want small ticks just use big ticks to 2 for min and max and set this to number between desired)
 extern int totalSmallTicks;
 extern int tickLabelOffset;
 extern int tickLength;
-extern int decimals;
+extern int smallFontOffset;
 extern bool smallTickLabel; //do we want these
 
 //screen objects

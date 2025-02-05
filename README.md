@@ -40,3 +40,4 @@ TFT_eSPI_Setups (from waveshare demo)
 
 ### KNOWN BUGS
 - When small tick labels have 4 characters drawn a grey line gets drawn to the bottom of the screen
+- Dynamic max does not centre the labels

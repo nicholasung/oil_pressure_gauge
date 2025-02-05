@@ -98,6 +98,7 @@ void loop(){
         }
         sensorRead();
         drawDial();
+        
     }
     
 }
