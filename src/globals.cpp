@@ -20,12 +20,12 @@ lv_color_t UIColour = defaultColour; //current colour to draw the ui in
 bool bootPlayed = false;
 
 //Sensor Info
-int sensorType = 0; // 0 reads internal accel for the orientation, 1 reads defined analog pin
+int sensorType = 1; // 0 reads internal accel for the orientation, 1 reads defined analog pin
 int analogPin = 15;
 float maxVReadout = 0.9; // max expected voltage as a percentage of input voltage
 
-float maxVal; //Min and Max expected readouts from sensor
-float minVal; 
+float maxVal = 4095; //Min and Max expected readouts from sensor
+float minVal = 0; 
 
 //QMI8658 Access
 
@@ -43,7 +43,7 @@ float warnThreshold = 0.7; //percentage below max to show max warning
 
     // Big Ticks
 int numBoldTicks = 5;
-int boldTickLabelOffset = 24;
+int boldTickLabelOffset = 12;
 int boldTicksLength = 24;
 
     //Small Ticks
