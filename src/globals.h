@@ -53,7 +53,7 @@ extern int totalSmallTicks;
 extern int tickLabelOffset;
 extern int tickLength;
 extern int decimals;
-extern bool smallTickLabels; //do we want these
+extern bool smallTickLabel; //do we want these
 
 //screen objects
 extern lv_obj_t *screen;
@@ -63,5 +63,12 @@ extern lv_obj_t *needle;
 extern lv_point_precise_t needle_coords[2];
 extern std::vector<lv_obj_t*> bigTicks; 
 extern std::vector<lv_obj_t*> smallTicks;
+extern std::vector<lv_obj_t*> bigTickLabels;
+extern std::vector<lv_obj_t*> smallTickLabels;
+extern std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords;
+extern std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords;
+
+
+
 
 

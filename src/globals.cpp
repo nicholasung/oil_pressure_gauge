@@ -52,7 +52,7 @@ int totalSmallTicks = (numBoldTicks-1)*numTicks;
 int tickLabelOffset = 20;
 int tickLength = 10;
 int decimals = 0;
-bool smallTickLabels = 1; //do we want these
+bool smallTickLabel = 1; //do we want these
 
 //screen objects
 lv_obj_t *screen;
@@ -60,6 +60,11 @@ lv_obj_t *readout;
 lv_obj_t *units;
 lv_obj_t *needle;
 lv_point_precise_t needle_coords[2];
-std::vector<lv_obj_t*> bigTicks(numBoldTicks); 
+std::vector<lv_obj_t*> bigTicks(numBoldTicks);
 std::vector<lv_obj_t*> smallTicks(totalSmallTicks); 
+std::vector<lv_obj_t*> bigTickLabels(numBoldTicks);
+std::vector<lv_obj_t*> smallTickLabels(totalSmallTicks); 
+std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords(numBoldTicks);
+std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords(totalSmallTicks);
+
 

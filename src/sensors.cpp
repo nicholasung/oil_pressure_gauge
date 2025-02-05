@@ -50,7 +50,7 @@ float sensorRead(){
         if (qmi.getDataReady()) {
             qmi.getAccelerometer(acc.x, acc.y, acc.z);
             currentAng = accelToDeg(acc.x, acc.y);
-            Serial.println(currentAng);
+            // Serial.println(currentAng);
             // Serial.println(analogRead(15));
         }
     } else if (sensorType == 1) {
