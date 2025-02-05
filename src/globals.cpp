@@ -3,6 +3,7 @@
 #include <lib_cfgs/CST816S_pin_config.h>
 #include <lvgl.h>
 #include <vector>
+#include <string>
 #include "SensorQMI8658.hpp"
 
 //UI Settings
@@ -64,6 +65,8 @@ std::vector<lv_obj_t*> bigTicks(numBoldTicks);
 std::vector<lv_obj_t*> smallTicks(totalSmallTicks); 
 std::vector<lv_obj_t*> bigTickLabels(numBoldTicks);
 std::vector<lv_obj_t*> smallTickLabels(totalSmallTicks); 
+std::vector<std::string> bigTickStringLabels(numBoldTicks);
+std::vector<std::string> smallTickStringLabels(totalSmallTicks);
 std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords(numBoldTicks);
 std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords(totalSmallTicks);
 

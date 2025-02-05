@@ -34,6 +34,8 @@ extern std::vector<lv_obj_t*> bigTickLabels;
 extern std::vector<lv_obj_t*> smallTickLabels;
 extern std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords;
 extern std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords;
+extern std::vector<std::string> bigTickStringLabels;
+extern std::vector<std::string> smallTickStringLabels;
 
 std::pair<std::pair<float, float>, std::pair<float, float>> calculateTickCoordinates(float degrees, float radius, float centre_x, float centre_y, float tickLength) {
     float ang_rads = degrees * M_PI / 180;
@@ -62,6 +64,49 @@ std::pair<int, int> tickLabelCoord(std::array<lv_point_precise_t, 2> tick_coords
         return std::make_pair(x_text, y_text);
 }
 
+void updateLabels() {
+    float bold_label_incr = (maxVal - minVal) / (numBoldTicks - 1);
+    float small_label_incr = (maxVal - minVal) / ((numTicks + 1) * (numBoldTicks - 1));
+    float label;
+    char buffer[20]; // Buffer to hold the formatted string
+
+    // Update big tick labels
+    for (int i = 0; i < numBoldTicks; i++) {
+        label = minVal + i * bold_label_incr;
+        sprintf(buffer, "%.0f", label);
+        bigTickStringLabels[i] = buffer;
+
+        if (bigTickLabels[i] != nullptr) {
+            lv_label_set_text(bigTickLabels[i], bigTickStringLabels[i].c_str());
+        } else {
+            Serial.print("Error: bigTickLabels[");
+            Serial.print(i);
+            Serial.println("] is null");
+        }
+    }
+
+    if(smallTickLabel == 1){
+        // Update small tick labels
+        for (int n = 1; n <= numBoldTicks - 1; n++) {
+            for (int i = 1; i <= numTicks; i++) {
+                int index = (n - 1) * numTicks + i - 1;
+                label = minVal + (n * bold_label_incr) + (i * small_label_incr);
+                sprintf(buffer, "%.0f", label);
+                smallTickStringLabels[index] = buffer;
+
+                if (smallTickLabels[index] != nullptr) {
+                    lv_label_set_text(smallTickLabels[index], smallTickStringLabels[index].c_str());
+                } else {
+                    Serial.print("Error: smallTickLabels[");
+                    Serial.print(index);
+                    Serial.println("] is null");
+                }
+            }
+        }
+    }
+
+}
+
 void drawTicks(){
     float bold_ang_incr = (maxAngle - minAngle) / (numBoldTicks - 1);
     float bold_label_incr = (maxVal - minVal) / (numBoldTicks - 1); //the - 1 on these calulcations is a dirty quick fix
@@ -81,6 +126,7 @@ void drawTicks(){
         lv_obj_align(currTick, LV_ALIGN_OUT_TOP_LEFT, 0, 0); 
         lv_obj_set_style_line_width(currTick, 2, LV_PART_MAIN);
         lv_obj_set_style_line_color(currTick, UIColour, LV_PART_MAIN);
+        bigTicks[i] = currTick;
 
         //make the label
         tickLabel = lv_label_create( lv_screen_active() );
@@ -88,13 +134,15 @@ void drawTicks(){
 
         buffer[8]; // Buffer to hold the formatted string
         sprintf(buffer, "%.0f", label); 
-        lv_label_set_text(tickLabel, buffer);
-
+        bigTickStringLabels[i] = buffer;
+        lv_label_set_text(tickLabel, bigTickStringLabels[i].c_str());
+        
         std::pair<int, int> label_coords = tickLabelCoord(bigTicksCoords[i]);
 
         lv_label_set_text(tickLabel, buffer);
         lv_obj_align( tickLabel, LV_ALIGN_OUT_TOP_LEFT, label_coords.first, label_coords.second);
         lv_obj_set_style_text_color(tickLabel, UIColour, LV_PART_MAIN);
+        bigTickLabels[i] = tickLabel;
     }
 
     float small_ang_incr = bold_ang_incr / (numTicks + 1);
@@ -118,20 +166,21 @@ void drawTicks(){
             lv_obj_align(currTick, LV_ALIGN_OUT_TOP_LEFT, 0, 0); 
             lv_obj_set_style_line_width(currTick, 2, LV_PART_MAIN);
             lv_obj_set_style_line_color(currTick, UIColour, LV_PART_MAIN);
-
+            smallTicks[index] = currTick;
             if(smallTickLabel == 1){
                 tickLabel = lv_label_create( lv_screen_active() );
                 label = minVal + i*small_label_incr+small_label_incr*(n-1)*(numTicks+1);
 
                 buffer[5]; // Buffer to hold the formatted string 
                 sprintf(buffer, "%.0f", label); // Convert float to string with 2 decimal places
-                lv_label_set_text(tickLabel, buffer);
-
+                smallTickStringLabels[index] = buffer;
+                lv_label_set_text(tickLabel, smallTickStringLabels[index].c_str());
                 std::pair<int, int> label_coords = tickLabelCoord(smallTicksCoords[index]);
 
                 lv_label_set_text(tickLabel, buffer);
                 lv_obj_align( tickLabel, LV_ALIGN_OUT_TOP_LEFT, label_coords.first, label_coords.second);
                 lv_obj_set_style_text_color(tickLabel, UIColour, LV_PART_MAIN);
+                smallTickLabels[index] = tickLabel;
             }
 
         }
@@ -189,7 +238,7 @@ void drawDial(){
     lv_label_set_text(readout, buffer);
 
     //draw untis
-    lv_label_set_text( units, unitLabel);
+    lv_label_set_text(units, unitLabel);
 
     //draw needle
     needle_coords[0].x = LV_HOR_RES/2; 
@@ -210,13 +259,13 @@ void bootAnimation(){
     lv_line_set_points(needle, needle_coords, 2); // Update the points
     lv_obj_align(needle, LV_ALIGN_OUT_TOP_LEFT, 0, 0); // Align the line to the center of the screen
     if(!reverse){
-        animation_angle++;
+        animation_angle+=2;
     } else {
-        animation_angle--;
+        animation_angle-=2;
     }
-    if(animation_angle == 360){
+    if(animation_angle >= 360){
         reverse = true;
-    } else if (reverse && animation_angle == 0){
+    } else if (reverse && animation_angle <= 0){
         bootPlayed = true;
         //somehow transition to the real value
         return;

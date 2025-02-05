@@ -40,7 +40,7 @@ void lv_touch_read(lv_indev_t * indev, lv_indev_data_t * data ){ //binds lv stat
 uint32_t lv_ticks(){
     return millis();
 }
-
+lv_display_t * disp;
 void setup(){
     touch.begin();
     Serial.begin(9600);
@@ -48,7 +48,7 @@ void setup(){
     lv_init();
     lv_tick_set_cb(lv_ticks);
 
-    lv_display_t * disp;
+    
 
 #if LV_USE_TFT_ESPI
     /*TFT_eSPI can be enabled lv_conf.h to initialize the display in a simple way*/
@@ -82,9 +82,8 @@ void loop(){
     } else {
         if(dynamicMax){
             if(currentVal > maxVal) maxVal = currentVal;
-            // updateLabels();
+            updateLabels();
         }
-        
         sensorRead();
         drawDial();
     }

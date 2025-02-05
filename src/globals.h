@@ -3,6 +3,7 @@
 #include <lib_cfgs/CST816S_pin_config.h>
 #include <lvgl.h>
 #include "SensorQMI8658.hpp"
+#include <string>
 
 #ifndef M_PI
 #define M_PI (3.14159265358979323846f)
@@ -67,6 +68,8 @@ extern std::vector<lv_obj_t*> bigTickLabels;
 extern std::vector<lv_obj_t*> smallTickLabels;
 extern std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords;
 extern std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords;
+extern std::vector<std::string> bigTickStringLabels;
+extern std::vector<std::string> smallTickStringLabels;
 
 
 
