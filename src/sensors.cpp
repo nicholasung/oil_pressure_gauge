@@ -7,6 +7,7 @@ extern SensorQMI8658 qmi;
 extern IMUdata acc;
 extern float currentAng;
 extern float currentVal;
+extern float maxVal;
 
 #ifndef SENSOR_SDA
 #define SENSOR_SDA  17
@@ -57,7 +58,7 @@ float sensorRead(){
     } else if (sensorType == 1) {
         currentVal = analogRead(15);
         Serial.println(currentVal);
-        currentAng = (currentVal/4095) * 360;
+        currentAng = (currentVal/maxVal) * 360;
     }
     return currentAng;
 };

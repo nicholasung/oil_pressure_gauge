@@ -14,6 +14,10 @@ extern bool bootPlayed;
 extern bool dynamicMax;
 extern float maxVal;
 extern float currentVal;
+extern float gradThreshold; 
+extern float warnThreshold; 
+extern lv_color_t UIColour; 
+extern lv_color_t defaultColour;
 
 
 CST816S touch(TOUCH_SDA, TOUCH_SCL, TOUCH_RST, TOUCH_IRQ);
@@ -83,6 +87,14 @@ void loop(){
         if(dynamicMax){
             if(currentVal > maxVal) maxVal = currentVal;
             updateLabels();
+        }
+        float ofMax = currentVal / maxVal;
+        if(ofMax < warnThreshold){
+            UIColour = lv_color_hex(0xFF0000); //can make this a gradient thing
+        } else if (ofMax < gradThreshold){
+            UIColour = lv_color_hex(0xFFFF00);
+        } else {
+            UIColour = defaultColour;
         }
         sensorRead();
         drawDial();

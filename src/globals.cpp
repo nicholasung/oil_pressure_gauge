@@ -39,8 +39,8 @@ IMUdata gyr;
 
 //General Settings
 bool dynamicMax = 1;
-float gradThreshold = 0.5; //percentage below max to start shifting colours
-float warnThreshold = 0.7; //percentage below max to show max warning
+float gradThreshold = 0.7; //percentage below max to start shifting colours
+float warnThreshold = 0.5; //percentage below max to show max warning
 
     // Big Ticks
 int numBoldTicks = 5;
