@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include "./globals.h"
 #include "SensorQMI8658.hpp"
+#include "esp_adc/adc_cali_scheme.h"
+#include "esp_adc/adc_continuous.h"
+#include "hal/adc_types.h"
 
 extern int sensorType;
 extern SensorQMI8658 qmi;
@@ -16,6 +19,11 @@ extern float maxVal;
 #define SENSOR_SCL  18
 #endif
 
+int adcIO = 15;
+adc_unit_t* adc_unit;
+adc_channel_t* channel;
+adc_continuous_handle_t handle;
+
 void sensorInit(){
     if(sensorType == 0){
         qmi.begin(Wire, QMI8658_L_SLAVE_ADDRESS, SENSOR_SDA, SENSOR_SCL);
@@ -29,7 +37,7 @@ void sensorInit(){
         qmi.enableINT(SensorQMI8658::INTERRUPT_PIN_1, true); //explicitly disable interupts
         qmi.enableINT(SensorQMI8658::INTERRUPT_PIN_2, false);
     } else if (sensorType == 1){
-        //analog read init
+
     }
     
 }
@@ -56,9 +64,10 @@ float sensorRead(){
             // Serial.println(analogRead(15));
         }
     } else if (sensorType == 1) {
-        currentVal = analogRead(15);
-        Serial.println(currentVal);
-        currentAng = (currentVal/maxVal) * 360;
+        //max value at 3.1v
+        float adc = analogRead(adcIO);
+        currentVal = adc/4095*maxVal;
+        currentAng = adc/4095*360;
     }
     return currentAng;
 };
