@@ -19,6 +19,8 @@ float currentVal = 0;
 float currentAng = 0; //angle to draw the needle in degrees
 lv_color_t UIColour = defaultColour; //current colour to draw the ui in 
 bool bootPlayed = false;
+float atm = 12;
+bool compensation = false; //compensate for sensor reading atm pressure
 
 //Sensor Info
 int sensorType = 1; // 0 reads internal accel for the orientation, 1 reads defined analog pin
@@ -27,6 +29,8 @@ float maxVReadout = 0.9; // max expected voltage as a percentage of input voltag
 
 float maxVal = 150; //Min and Max expected readouts from sensor
 float minVal = 0; 
+float zeroOffset = 19;
+bool calibrationFunction = true;
 
 //QMI8658 Access
 

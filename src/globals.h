@@ -22,7 +22,8 @@ extern float maxVReadout; // max expected voltage as a percentage of input volta
 
 extern float maxVal; //Min and Max expected readouts from sensor
 extern float minVal; 
-
+extern float zeroOffset;
+extern bool calibrationFunction;
 //QMI8658 Access
 
 extern SensorQMI8658 qmi;

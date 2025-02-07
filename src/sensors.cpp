@@ -11,6 +11,8 @@ extern IMUdata acc;
 extern float currentAng;
 extern float currentVal;
 extern float maxVal;
+extern float zeroOffset;
+extern bool calibrationFunction;
 
 #ifndef SENSOR_SDA
 #define SENSOR_SDA  17
@@ -55,6 +57,10 @@ float accelToDeg(float x, float y) { //Assumes usb port is at the bottom
     return ang;
 }
 
+float calibration(float input){ //THE SPECIFIC FUNCTION TO CALIBRATE MY SPECIFIC SENSOR BASED ON EXPERIMENTAL 
+    return -0.0000051349*pow(input,2)+0.0482884*input-24.07043;
+}
+
 float sensorRead(){
     if(sensorType == 0){
         if (qmi.getDataReady()) {
@@ -64,10 +70,16 @@ float sensorRead(){
             // Serial.println(analogRead(15));
         }
     } else if (sensorType == 1) {
-        //max value at 3.1v
         float adc = analogRead(adcIO);
-        currentVal = adc/4095*maxVal;
-        currentAng = adc/4095*360;
+        if(calibrationFunction){
+            currentVal = calibration(adc);
+            if(adc <= 600){
+                currentVal = 0;
+            }
+        } else {
+            currentVal = (adc/4095*maxVal);
+        }
+        currentAng = (currentVal/maxVal)*360;
     }
     return currentAng;
 };
