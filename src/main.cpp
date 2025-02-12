@@ -23,6 +23,7 @@ extern lv_color_t UIColour;
 extern lv_color_t defaultColour;
 extern float intervalMax;
 extern float intervalMin;
+extern bool intervalTicks;
 
 int MAX_QUEUE_SIZE = 100;
 
@@ -108,28 +109,29 @@ void loop(){
         updateLabels();
     }
 
-    values.push(currentVal); //should be the 101th element in the queue
-    if(currentVal >= intervalMax){
-        intervalMax = currentVal;
-    };
-    if(currentVal <= intervalMin){
-        intervalMax = currentVal;
-    };
-
-    Serial.println(values.size());
-    if(values.size() > MAX_QUEUE_SIZE){ //ensures the queue only contains the values from the past second
-        float curr = values.front();
-        if(curr == intervalMax || curr == intervalMin){ //check if pop = interval min and max and if it does find extrema (not most efficient but good enough and easy to implement. mcu can handle it)        
-            // this should not be drawn as a tick  as it will be over written before the next render call
-            intervalMax = 0;
-            intervalMin = maxVal;
-            values.pop();
-            findExtrema();
-        } else {
-            values.pop();
-        }  
+    if(intervalTicks){
+        values.push(currentVal); //should be the 101th element in the queue
+        if(currentVal >= intervalMax){
+            intervalMax = currentVal;
+        };
+        if(currentVal <= intervalMin){
+            intervalMax = currentVal;
+        };
+    
+        Serial.println(values.size());
+        if(values.size() > MAX_QUEUE_SIZE){ //ensures the queue only contains the values from the past second
+            float curr = values.front();
+            if(curr == intervalMax || curr == intervalMin){ //check if pop = interval min and max and if it does find extrema (not most efficient but good enough and easy to implement. mcu can handle it)        
+                // this should not be drawn as a tick  as it will be over written before the next render call
+                intervalMax = 0;
+                intervalMin = maxVal;
+                values.pop();
+                findExtrema();
+            } else {
+                values.pop();
+            }  
+        }    
     }
-        
 
     float ofMax = currentVal / maxVal;
     if(ofMax < warnThreshold){

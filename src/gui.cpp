@@ -19,6 +19,9 @@ static lv_style_t style_font_12;
 static lv_style_t style_font_16;
 static lv_style_t style_font_14;
 
+extern lv_color_t intervalMaxColour;
+extern lv_color_t intervalMinColour;
+
 extern int smallFontOffset;
 extern int bigFontOffset;
 extern float currentAng;
@@ -33,9 +36,12 @@ extern lv_obj_t *units;
 extern char * unitLabel;
 extern lv_color_t backgroundColour;
 extern lv_obj_t *screen;
+extern bool intervalTicks;
 
 extern float maxVal;
 extern float minVal;
+extern float intervalMax;
+extern float intervalMin;
 
 extern int decimals;
 extern int numTicks; 
@@ -52,6 +58,12 @@ extern std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords;
 extern std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords;
 extern std::vector<std::string> bigTickStringLabels;
 extern std::vector<std::string> smallTickStringLabels;
+extern lv_obj_t* intervalMaxTick;
+extern lv_obj_t* intervalMinTick;
+extern std::array<lv_point_precise_t, 2> intervalMaxTickCoords;
+extern std::array<lv_point_precise_t, 2> intervalMinTickCoords;
+extern int intervalTickLength; 
+
 
 void initFontStyles() {
     // Initialize style for font size 20
@@ -305,6 +317,37 @@ std::pair<int, int> degToCoords(float deg){ //takes an angle and gives coordinat
     return std::make_pair(x, y);
 }
 
+void drawIntervalTicks(){
+    //calculate the angle relative to the ticks to draw them
+    float maxIntAng = intervalMax/maxVal * (maxAngle);
+    float minIntAng = intervalMin/minVal * (maxAngle);
+
+    std::pair<std::pair<float, float>, std::pair<float, float>> coords = calculateTickCoordinates(maxAngle, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
+    intervalMaxTickCoords[0].x = coords.first.first;
+    intervalMaxTickCoords[0].y = coords.first.second;
+    intervalMaxTickCoords[1].x = coords.second.first;
+    intervalMaxTickCoords[1].y = coords.second.second;
+    
+    coords = calculateTickCoordinates(minAngle, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
+    intervalMinTickCoords[0].x = coords.first.first;
+    intervalMinTickCoords[0].y = coords.first.second;
+    intervalMinTickCoords[1].x = coords.second.first;
+    intervalMinTickCoords[1].y = coords.second.second;    
+
+    intervalMaxTick = lv_line_create(lv_scr_act());
+    lv_line_set_points(intervalMaxTick, intervalMaxTickCoords.data(), 2);
+    lv_obj_align(intervalMaxTick, LV_ALIGN_OUT_TOP_LEFT, 0, 0); 
+    lv_obj_set_style_line_width(intervalMaxTick, 2, LV_PART_MAIN);
+    lv_obj_set_style_line_color(intervalMaxTick, intervalMaxColour, LV_PART_MAIN);
+
+    intervalMinTick = lv_line_create(lv_scr_act());
+    lv_line_set_points(intervalMinTick, intervalMinTickCoords.data(), 2);
+    lv_obj_align(intervalMinTick, LV_ALIGN_OUT_TOP_LEFT, 0, 0); 
+    lv_obj_set_style_line_width(intervalMinTick, 2, LV_PART_MAIN);
+    lv_obj_set_style_line_color(intervalMinTick, intervalMinColour, LV_PART_MAIN);
+
+}
+
 void drawDial(){    
     //Draw Readout
     buffer[8]; // Buffer to hold the formatted string
@@ -321,6 +364,8 @@ void drawDial(){
     lv_obj_set_style_line_color(needle, UIColour, LV_PART_MAIN); 
     lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
     lv_obj_set_style_text_color(units, UIColour, LV_PART_MAIN);
+
+    if(intervalTicks) drawIntervalTicks();
 
     //set needle direction
     std::pair coords = degToCoords(currentAng);

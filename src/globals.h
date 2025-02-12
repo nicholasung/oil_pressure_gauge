@@ -18,6 +18,9 @@ extern bool bootPlayed;
 extern std::queue<float> values;
 extern float intervalMax;
 extern float intervalMin;
+extern bool intervalTicks;
+extern lv_color_t intervalMaxColour;
+extern lv_color_t intervalMinColour;
 
 //Sensor Info
 extern int sensorType; // 0 reads internal accel for the orientation, 1 reads defined analog pin
@@ -47,6 +50,7 @@ extern float minAngle; //
 extern lv_color_t backgroundColour; //background colour in hex (#rrggbb)
 extern lv_color_t defaultColour; //default colour to draw ui in
 extern int readoutDeci;
+extern int intervalTickLength; 
 
 // Big Ticks
 extern int numBoldTicks;
@@ -76,6 +80,12 @@ extern std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords;
 extern std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords;
 extern std::vector<std::string> bigTickStringLabels;
 extern std::vector<std::string> smallTickStringLabels;
+
+extern lv_obj_t* intervalMaxTick;
+extern lv_obj_t* intervalMinTick;
+extern std::array<lv_point_precise_t, 2> intervalMaxTickCoords;
+extern std::array<lv_point_precise_t, 2> intervalMinTickCoords;
+
 
 
 
