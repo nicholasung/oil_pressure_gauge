@@ -2,6 +2,7 @@
 #include <CST816S.h>
 #include <lib_cfgs/CST816S_pin_config.h>
 #include <lvgl.h>
+#include <queue>
 #include "SensorQMI8658.hpp"
 #include <string>
 
@@ -14,6 +15,9 @@ extern float currentVal;
 extern float currentAng; //angle to draw the needle in degrees
 extern lv_color_t UIColour; //current colour to draw the ui in 
 extern bool bootPlayed;
+extern std::queue<float> values;
+extern float intervalMax;
+extern float intervalMin;
 
 //Sensor Info
 extern int sensorType; // 0 reads internal accel for the orientation, 1 reads defined analog pin

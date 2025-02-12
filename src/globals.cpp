@@ -3,6 +3,7 @@
 #include <lib_cfgs/CST816S_pin_config.h>
 #include <lvgl.h>
 #include <vector>
+#include <queue>
 #include <string>
 #include "SensorQMI8658.hpp"
 
@@ -14,13 +15,6 @@ lv_color_t backgroundColour = lv_color_hex(0x000000); //background colour in hex
 lv_color_t defaultColour = lv_color_hex(0xFFFFFF); //default colour to draw ui in
 int readoutDeci = 0;
 
-//Global Access
-float currentVal = 0;
-float currentAng = 0; //angle to draw the needle in degrees
-lv_color_t UIColour = defaultColour; //current colour to draw the ui in 
-bool bootPlayed = false;
-float atm = 12;
-bool compensation = false; //compensate for sensor reading atm pressure
 
 //Sensor Info
 int sensorType = 1; // 0 reads internal accel for the orientation, 1 reads defined analog pin
@@ -30,13 +24,23 @@ float maxVReadout = 0.9; // max expected voltage as a percentage of input voltag
 float maxVal = 150; //Min and Max expected readouts from sensor
 float minVal = 0; 
 float zeroOffset = 19;
-bool calibrationFunction = true;
+bool calibrationFunction = false;
+
+
+//Global Access
+float currentVal = 0;
+float currentAng = 0; //angle to draw the needle in degrees
+lv_color_t UIColour = defaultColour; //current colour to draw the ui in 
+bool bootPlayed = false;
+float atm = 12;
+bool compensation = false; //compensate for sensor reading atm pressure
+float intervalMax = 0; 
+float intervalMin = maxVal;
+std::queue<float> values;
+
 
 //QMI8658 Access
-
-
 SensorQMI8658 qmi;
-
 IMUdata acc;
 IMUdata gyr;
 
@@ -75,4 +79,7 @@ std::vector<std::string> smallTickStringLabels(totalSmallTicks);
 std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords(numBoldTicks);
 std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords(totalSmallTicks);
 
-
+lv_obj_t* intervalMaxTick;
+lv_obj_t* intervalMinTick;
+std::array<lv_point_precise_t, 2> intervalMaxTickCoords;
+std::array<lv_point_precise_t, 2> intervalMinTickCoords;

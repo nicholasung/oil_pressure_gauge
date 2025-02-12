@@ -10,14 +10,21 @@
 #include <TFT_eSPI.h>
 #endif
 
+#define LOOP_INTERVAL 10 //refresh 100 times a second
+
 extern bool bootPlayed;
 extern bool dynamicMax;
 extern float maxVal;
+extern float minVal;
 extern float currentVal;
 extern float gradThreshold; 
 extern float warnThreshold; 
 extern lv_color_t UIColour; 
 extern lv_color_t defaultColour;
+extern float intervalMax;
+extern float intervalMin;
+
+int MAX_QUEUE_SIZE = 100;
 
 
 CST816S touch(TOUCH_SDA, TOUCH_SCL, TOUCH_RST, TOUCH_IRQ);
@@ -44,6 +51,7 @@ void lv_touch_read(lv_indev_t * indev, lv_indev_data_t * data ){ //binds lv stat
 uint32_t lv_ticks(){
     return millis();
 }
+
 lv_display_t * disp;
 void setup(){
     touch.begin();
@@ -51,8 +59,6 @@ void setup(){
     Serial.println("START SETUP");
     lv_init();
     lv_tick_set_cb(lv_ticks);
-
-    
 
 #if LV_USE_TFT_ESPI
     /*TFT_eSPI can be enabled lv_conf.h to initialize the display in a simple way*/
@@ -76,29 +82,68 @@ void setup(){
 }
 
 
+void findExtrema(){
+    std::queue<float> copy = values;
+    while (!copy.empty()) {
+        int value = copy.front();
+        if(value >= intervalMax){
+            intervalMax = currentVal;
+        };
+        if(value <= intervalMin){
+            intervalMax = currentVal;
+        };
+        copy.pop();
+    }
+}
 
 void loop(){
+    static unsigned long lastExecutionTime = 0;
+    unsigned long currentTime = millis();
+
+    if (currentTime - lastExecutionTime >= LOOP_INTERVAL) lastExecutionTime = currentTime;
+
     lv_timer_handler();
-    delay(5); 
-    // Boot animation
-    if (!bootPlayed) {
-        bootAnimation();
-    } else {
-        if(dynamicMax){
-            if(currentVal > maxVal) maxVal = currentVal;
-            updateLabels();
-        }
-        float ofMax = currentVal / maxVal;
-        if(ofMax < warnThreshold){
-            UIColour = lv_color_hex(0xFF0000); //can make this a gradient thing
-        } else if (ofMax < gradThreshold){
-            UIColour = lv_color_hex(0xFFFF00);
-        } else {
-            UIColour = defaultColour;
-        }
-        sensorRead();
-        drawDial();
-        
+    if(dynamicMax){
+        if(currentVal > maxVal) maxVal = currentVal;
+        updateLabels();
     }
-    
+
+    values.push(currentVal); //should be the 101th element in the queue
+    if(currentVal >= intervalMax){
+        intervalMax = currentVal;
+    };
+    if(currentVal <= intervalMin){
+        intervalMax = currentVal;
+    };
+
+    Serial.println(values.size());
+    if(values.size() > MAX_QUEUE_SIZE){ //ensures the queue only contains the values from the past second
+        float curr = values.front();
+        if(curr == intervalMax || curr == intervalMin){ //check if pop = interval min and max and if it does find extrema (not most efficient but good enough and easy to implement. mcu can handle it)        
+            // this should not be drawn as a tick  as it will be over written before the next render call
+            intervalMax = 0;
+            intervalMin = maxVal;
+            values.pop();
+            findExtrema();
+        } else {
+            values.pop();
+        }  
+    }
+        
+
+    float ofMax = currentVal / maxVal;
+    if(ofMax < warnThreshold){
+        UIColour = lv_color_hex(0xFF0000); //can make this a gradient thing
+    } else if (ofMax < gradThreshold){
+        UIColour = lv_color_hex(0xFFFF00);
+    } else {
+        UIColour = defaultColour;
+    }
+    sensorRead();
+    drawDial();
+
+    // if (!bootPlayed) {
+    //     bootAnimation();
+    // } else {
+    // }  
 }
