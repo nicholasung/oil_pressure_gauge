@@ -88,10 +88,10 @@ void findExtrema(){
     while (!copy.empty()) {
         int value = copy.front();
         if(value >= intervalMax){
-            intervalMax = currentVal;
+            intervalMax = value;
         };
         if(value <= intervalMin){
-            intervalMax = currentVal;
+            intervalMin = value;
         };
         copy.pop();
     }
@@ -115,7 +115,7 @@ void loop(){
             intervalMax = currentVal;
         };
         if(currentVal <= intervalMin){
-            intervalMax = currentVal;
+            intervalMin = currentVal;
         };
     
         Serial.println(values.size());
