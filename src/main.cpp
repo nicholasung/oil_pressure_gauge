@@ -82,21 +82,6 @@ void setup(){
     loop();
 }
 
-
-void findExtrema(){
-    std::queue<float> copy = values;
-    while (!copy.empty()) {
-        int value = copy.front();
-        if(value >= intervalMax){
-            intervalMax = value;
-        };
-        if(value <= intervalMin){
-            intervalMin = value;
-        };
-        copy.pop();
-    }
-}
-
 void loop(){
     static unsigned long lastExecutionTime = 0;
     unsigned long currentTime = millis();
@@ -110,27 +95,18 @@ void loop(){
     }
 
     if(intervalTicks){
-        values.push(currentVal); //should be the 101th element in the queue
         if(currentVal >= intervalMax){
             intervalMax = currentVal;
         };
         if(currentVal <= intervalMin){
             intervalMin = currentVal;
         };
-    
-        Serial.println(values.size());
-        if(values.size() > MAX_QUEUE_SIZE){ //ensures the queue only contains the values from the past second
-            float curr = values.front();
-            if(curr == intervalMax || curr == intervalMin){ //check if pop = interval min and max and if it does find extrema (not most efficient but good enough and easy to implement. mcu can handle it)        
-                // this should not be drawn as a tick  as it will be over written before the next render call
-                intervalMax = 0;
-                intervalMin = maxVal;
-                values.pop();
-                findExtrema();
-            } else {
-                values.pop();
-            }  
-        }    
+        
+        if (touch.available()) { //basically if any form of touch happens
+            //effective reset of interval
+            intervalMax = currentVal;
+            intervalMin = currentVal;
+        }
     }
 
     float ofMax = currentVal / maxVal;

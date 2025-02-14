@@ -30,7 +30,6 @@ float minVal = 0;
 float zeroOffset = 19;
 bool calibrationFunction = false;
 
-
 //Global Access
 float currentVal = 0;
 float currentAng = 0; //angle to draw the needle in degrees
@@ -42,12 +41,10 @@ float intervalMax = 0;
 float intervalMin = maxVal;
 std::queue<float> values;
 
-
 //QMI8658 Access
 SensorQMI8658 qmi;
 IMUdata acc;
 IMUdata gyr;
-
 
 //General Settings
 bool dynamicMax = 0;
