@@ -83,8 +83,8 @@ extern std::vector<std::string> smallTickStringLabels;
 
 extern lv_obj_t* intervalMaxTick;
 extern lv_obj_t* intervalMinTick;
-extern std::array<lv_point_precise_t, 2> intervalMaxTickCoords;
-extern std::array<lv_point_precise_t, 2> intervalMinTickCoords;
+extern lv_point_precise_t intervalMaxTickCoords[2];
+extern lv_point_precise_t intervalMinTickCoords[2];
 
 
 

@@ -80,7 +80,9 @@ std::vector<std::string> smallTickStringLabels(totalSmallTicks);
 std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords(numBoldTicks);
 std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords(totalSmallTicks);
 
-lv_obj_t* intervalMaxTick;
-lv_obj_t* intervalMinTick;
-std::array<lv_point_precise_t, 2> intervalMaxTickCoords;
-std::array<lv_point_precise_t, 2> intervalMinTickCoords;
+lv_obj_t *intervalMaxTick;
+lv_obj_t *intervalMinTick;
+lv_point_precise_t intervalMaxTickCoords[2];
+lv_point_precise_t intervalMinTickCoords[2];
+// std::array<lv_point_precise_t, 2> intervalMaxTickCoords;
+// std::array<lv_point_precise_t, 2> intervalMinTickCoords;

@@ -60,8 +60,6 @@ extern std::vector<std::string> bigTickStringLabels;
 extern std::vector<std::string> smallTickStringLabels;
 extern lv_obj_t* intervalMaxTick;
 extern lv_obj_t* intervalMinTick;
-extern std::array<lv_point_precise_t, 2> intervalMaxTickCoords;
-extern std::array<lv_point_precise_t, 2> intervalMinTickCoords;
 extern int intervalTickLength; 
 
 
@@ -290,13 +288,13 @@ void initIntervalTicks(){
     intervalMinTickCoords[1].y = coords.second.second;    
 
     intervalMaxTick = lv_line_create(lv_scr_act());
-    lv_line_set_points(intervalMaxTick, intervalMaxTickCoords.data(), 2);
+    lv_line_set_points(intervalMaxTick, intervalMaxTickCoords, 2);
     lv_obj_align(intervalMaxTick, LV_ALIGN_OUT_TOP_LEFT, 0, 0); 
     lv_obj_set_style_line_width(intervalMaxTick, 2, LV_PART_MAIN);
     lv_obj_set_style_line_color(intervalMaxTick, intervalMaxColour, LV_PART_MAIN);
 
     intervalMinTick = lv_line_create(lv_scr_act());
-    lv_line_set_points(intervalMinTick, intervalMinTickCoords.data(), 2);
+    lv_line_set_points(intervalMinTick, intervalMinTickCoords, 2);
     lv_obj_align(intervalMinTick, LV_ALIGN_OUT_TOP_LEFT, 0, 0); 
     lv_obj_set_style_line_width(intervalMinTick, 2, LV_PART_MAIN);
     lv_obj_set_style_line_color(intervalMinTick, intervalMinColour, LV_PART_MAIN);
@@ -357,21 +355,22 @@ void drawIntervalTicks(){
     Serial.print("MAX INTERVAL ANG: ");
     Serial.println(maxIntAng);
 
-    std::pair<std::pair<float, float>, std::pair<float, float>> coords = calculateTickCoordinates(maxAngle, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
+    std::pair<std::pair<float, float>, std::pair<float, float>> coords = calculateTickCoordinates(intervalMax, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
     intervalMaxTickCoords[0].x = coords.first.first;
     intervalMaxTickCoords[0].y = coords.first.second;
     intervalMaxTickCoords[1].x = coords.second.first;
     intervalMaxTickCoords[1].y = coords.second.second;
+    lv_line_set_points(intervalMaxTick, intervalMaxTickCoords, 2);
+    lv_obj_set_style_line_color(intervalMaxTick, intervalMaxColour, LV_PART_MAIN);
+    lv_obj_move_foreground(intervalMaxTick);
     
-    coords = calculateTickCoordinates(minAngle, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
+    coords = calculateTickCoordinates(intervalMin, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength); //MAKE SURE YOU LABEL YOUR PLACEHOLDERS NEXT TIME DUDE
     intervalMinTickCoords[0].x = coords.first.first;
     intervalMinTickCoords[0].y = coords.first.second;
     intervalMinTickCoords[1].x = coords.second.first;
-    intervalMinTickCoords[1].y = coords.second.second;    
-
-    lv_line_set_points(intervalMaxTick, intervalMaxTickCoords.data(), 2);
-    lv_line_set_points(intervalMinTick, intervalMinTickCoords.data(), 2);
-    lv_obj_move_foreground(intervalMaxTick);
+    intervalMinTickCoords[1].y = coords.second.second;  
+    lv_line_set_points(intervalMinTick, intervalMinTickCoords, 2);
+    lv_obj_set_style_line_color(intervalMinTick, intervalMinColour, LV_PART_MAIN);  
     lv_obj_move_foreground(intervalMinTick);
 }
 
@@ -383,6 +382,10 @@ void drawDial(){
 
     //draw units
     lv_label_set_text(units, unitLabel);
+    
+    if(intervalTicks){
+        drawIntervalTicks();
+    } 
 
     //draw needle
     needle_coords[0].x = LV_HOR_RES/2; 
@@ -392,9 +395,6 @@ void drawDial(){
     lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
     lv_obj_set_style_text_color(units, UIColour, LV_PART_MAIN);
 
-    if(intervalTicks){
-        drawIntervalTicks();
-    } 
 
     //set needle direction
     std::pair coords = degToCoords(currentAng);
