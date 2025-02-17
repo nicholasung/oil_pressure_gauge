@@ -40,6 +40,7 @@ bool compensation = false; //compensate for sensor reading atm pressure
 float intervalMax = 0; 
 float intervalMin = maxVal;
 std::queue<float> values;
+int tickOffset = 180;
 
 //QMI8658 Access
 SensorQMI8658 qmi;
@@ -48,8 +49,8 @@ IMUdata gyr;
 
 //General Settings
 bool dynamicMax = 0;
-float gradThreshold = 0.7; //percentage below max to start shifting colours
-float warnThreshold = 0.5; //percentage below max to show max warning
+float gradThreshold = 30/maxVal; //percentage below max to start shifting colours
+float warnThreshold = 20/maxVal; //percentage below max to show max warning
 
     // Big Ticks
 int numBoldTicks = 16; // you need to set this to 1 higher than you actually want?

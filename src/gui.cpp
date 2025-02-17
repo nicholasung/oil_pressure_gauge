@@ -38,6 +38,7 @@ extern lv_color_t backgroundColour;
 extern lv_obj_t *screen;
 extern bool intervalTicks;
 
+extern int tickOffset;
 extern float maxVal;
 extern float minVal;
 extern float intervalMax;
@@ -101,8 +102,27 @@ void applyFontStyle(lv_obj_t* label, int fontSize) {
     }
 }
 
+float valToDeg(float val){ //normalize the value relative to max out of 360
+    return val/maxVal * 360;
+}
+
+float scaleDeg(float val){ //calculate actual angle based on the defined min and max angles and a val from 0-360
+    return val/360*(maxAngle-minAngle);
+}
+
+std::pair<int, int> degToCoords(float deg){ //takes an angle and gives coordinates to the edge of the screen relative to zero
+    float offset = minAngle + 180;
+    // Scale angle between min angle and max angle
+    float scale_ang = deg / 360.0 * (maxAngle - minAngle);
+    float rad_ang = (offset + scale_ang) * M_PI / 180.0; // Degrees to radians
+    int x = LV_HOR_RES/2 + radius * sin(rad_ang);
+    int y = LV_HOR_RES/2 + radius * -cos(rad_ang);
+
+    return std::make_pair(x, y);
+}
+
 std::pair<std::pair<float, float>, std::pair<float, float>> calculateTickCoordinates(float degrees, float radius, float centre_x, float centre_y, float tickLength) {
-    float ang_rads = (degrees + 180) * M_PI / 180; //180 offset 
+    float ang_rads = (degrees + tickOffset) * M_PI / 180; //180 offset 
     float x_end = LV_HOR_RES/2 + radius * sin(ang_rads);
     float y_end = LV_VER_RES/2 + radius * -cos(ang_rads);
     // scale to direction
@@ -117,19 +137,15 @@ std::pair<std::pair<float, float>, std::pair<float, float>> calculateTickCoordin
 }
 
 std::pair<int, int> tickLabelCoord(std::array<lv_point_precise_t, 2> tick_coords){
-        float dir_x = tick_coords[1].x - LV_HOR_RES/2;
-        float dir_y = tick_coords[1].y - LV_VER_RES/2;
-        float length = sqrt(dir_x * dir_x + dir_y * dir_y);
-        dir_x /= length;
-        dir_y /= length;
+    float dir_x = tick_coords[1].x - LV_HOR_RES/2;
+    float dir_y = tick_coords[1].y - LV_VER_RES/2;
+    float length = sqrt(dir_x * dir_x + dir_y * dir_y);
+    dir_x /= length;
+    dir_y /= length;
 
-        float x_text = tick_coords[0].x - dir_x * boldTickLabelOffset;
-        float y_text = tick_coords[0].y - dir_y * boldTickLabelOffset;
-        return std::make_pair(x_text, y_text);
-}
-
-float valToDeg(float val){
-    return val/maxVal * 360;
+    float x_text = tick_coords[0].x - dir_x * boldTickLabelOffset;
+    float y_text = tick_coords[0].y - dir_y * boldTickLabelOffset;
+    return std::make_pair(x_text, y_text);
 }
 
 void updateLabels() {
@@ -275,18 +291,13 @@ void drawTicks(){
 }
 
 void initIntervalTicks(){
-    //calculate the angle relative to the ticks to draw them
-    float maxIntAng = minAngle;
-    float minIntAng = minAngle;
-
-    std::pair<std::pair<float, float>, std::pair<float, float>> coords = calculateTickCoordinates(maxAngle, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
+    std::pair<std::pair<float, float>, std::pair<float, float>> coords = calculateTickCoordinates(currentAng, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
     intervalMaxTickCoords[0].x = coords.first.first;
     intervalMaxTickCoords[0].y = coords.first.second;
     intervalMaxTickCoords[1].x = coords.second.first;
     intervalMaxTickCoords[1].y = coords.second.second;
     
-    coords = calculateTickCoordinates(minAngle, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
-    intervalMinTickCoords[0].x = coords.first.first;
+    intervalMinTickCoords[0].x = coords.first.first; //Will always init to 0 due to a hardware limitation on the boot. Can fix by delaying the update some time
     intervalMinTickCoords[0].y = coords.first.second;
     intervalMinTickCoords[1].x = coords.second.first;
     intervalMinTickCoords[1].y = coords.second.second;    
@@ -338,26 +349,10 @@ void guiInit(){
     drawTicks();
 }
 
-std::pair<int, int> degToCoords(float deg){ //takes an angle and gives coordinates to the edge of the screen relative to zero
-    float offset = minAngle + 180;
-    // Scale angle between min angle and max angle
-    float scale_ang = deg / 360.0 * (maxAngle - minAngle);
-    float rad_ang = (offset + scale_ang) * M_PI / 180.0; // Degrees to radians
-    int x = LV_HOR_RES/2 + radius * sin(rad_ang);
-    int y = LV_HOR_RES/2 + radius * -cos(rad_ang);
-
-    return std::make_pair(x, y);
-}
-
 void drawIntervalTicks(){
-    //calculate the angle relative to the ticks to draw them
+    //calculate the angle relative to the interval values to draw them
     float maxIntAng = intervalMax/maxVal * (maxAngle-minAngle) + minAngle;
     float minIntAng = intervalMin/maxVal * (maxAngle-minAngle) + minAngle;
-    
-    Serial.print("MIN INTERVAL ANG: ");
-    Serial.println(minIntAng);
-    Serial.print("MAX INTERVAL ANG: ");
-    Serial.println(maxIntAng);
 
     std::pair<std::pair<float, float>, std::pair<float, float>> coords = calculateTickCoordinates(maxIntAng, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
     intervalMaxTickCoords[0].x = coords.first.first;

@@ -21,6 +21,7 @@ extern float intervalMin;
 extern bool intervalTicks;
 extern lv_color_t intervalMaxColour;
 extern lv_color_t intervalMinColour;
+extern int tickOffset;
 
 //Sensor Info
 extern int sensorType; // 0 reads internal accel for the orientation, 1 reads defined analog pin
@@ -31,8 +32,8 @@ extern float maxVal; //Min and Max expected readouts from sensor
 extern float minVal; 
 extern float zeroOffset;
 extern bool calibrationFunction;
-//QMI8658 Access
 
+//QMI8658 Access
 extern SensorQMI8658 qmi;
 
 extern IMUdata acc;
