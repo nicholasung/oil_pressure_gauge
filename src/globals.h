@@ -22,6 +22,9 @@ extern bool intervalTicks;
 extern lv_color_t intervalMaxColour;
 extern lv_color_t intervalMinColour;
 extern int tickOffset;
+extern float centreX;
+extern float centreY;
+
 
 //Sensor Info
 extern int sensorType; // 0 reads internal accel for the orientation, 1 reads defined analog pin

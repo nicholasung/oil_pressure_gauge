@@ -122,7 +122,7 @@ std::pair<int, int> degToCoords(float deg){ //takes an angle and gives coordinat
 }
 
 std::pair<std::pair<float, float>, std::pair<float, float>> calculateTickCoordinates(float degrees, float radius, float centre_x, float centre_y, float tickLength) {
-    float ang_rads = (degrees + tickOffset) * M_PI / 180; //180 offset 
+    float ang_rads = (degrees + tickOffset + minAngle) * M_PI / 180; //180 offset 
     float x_end = LV_HOR_RES/2 + radius * sin(ang_rads);
     float y_end = LV_VER_RES/2 + radius * -cos(ang_rads);
     // scale to direction
@@ -198,7 +198,7 @@ void drawTicks(){
     for(int i = 0; i < numBoldTicks; i++){
         lv_obj_t* currTick = bigTicks[i];
         lv_obj_t* tickLabel = bigTickLabels[i];
-        auto coordinates = calculateTickCoordinates(minAngle + (i * bold_ang_incr), radius, LV_HOR_RES/2, LV_VER_RES/2, boldTicksLength);
+        auto coordinates = calculateTickCoordinates(i * bold_ang_incr, radius, LV_HOR_RES/2, LV_VER_RES/2, boldTicksLength);
         bigTicksCoords[i][0].x = coordinates.first.first;
         bigTicksCoords[i][0].y = coordinates.first.second;
         bigTicksCoords[i][1].x = coordinates.second.first;
@@ -240,7 +240,7 @@ void drawTicks(){
     float small_ang_incr = bold_ang_incr / (numTicks + 1);
     float small_label_incr; 
     if(smallTickLabel == 1) small_label_incr = (maxVal - minVal) / ((numTicks+1)*(numBoldTicks-1)); 
-    float base_ang = minAngle;
+    float base_ang = 0;
     for(int n = 1; n <= numBoldTicks - 1; n++){
         for(int i = 1; i <= numTicks; i++){
             int index = (n - 1) * numTicks + i - 1;
@@ -297,7 +297,7 @@ void initIntervalTicks(){
     intervalMaxTickCoords[1].x = coords.second.first;
     intervalMaxTickCoords[1].y = coords.second.second;
     
-    intervalMinTickCoords[0].x = coords.first.first; //Will always init to 0 due to a hardware limitation on the boot. Can fix by delaying the update some time
+    intervalMinTickCoords[0].x = coords.first.first; //Will always init to 0 angle due to a hardware limitation on the boot. Can fix by delaying the update some time
     intervalMinTickCoords[0].y = coords.first.second;
     intervalMinTickCoords[1].x = coords.second.first;
     intervalMinTickCoords[1].y = coords.second.second;    
@@ -351,8 +351,10 @@ void guiInit(){
 
 void drawIntervalTicks(){
     //calculate the angle relative to the interval values to draw them
-    float maxIntAng = intervalMax/maxVal * (maxAngle-minAngle) + minAngle;
-    float minIntAng = intervalMin/maxVal * (maxAngle-minAngle) + minAngle;
+    float maxIntAng = valToDeg(intervalMax);
+    maxIntAng = scaleDeg(maxIntAng);
+    float minIntAng = valToDeg(intervalMin);
+    minIntAng = scaleDeg(minIntAng);
 
     std::pair<std::pair<float, float>, std::pair<float, float>> coords = calculateTickCoordinates(maxIntAng, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
     intervalMaxTickCoords[0].x = coords.first.first;

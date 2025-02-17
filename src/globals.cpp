@@ -36,7 +36,9 @@ float currentAng = 0; //angle to draw the needle in degrees
 lv_color_t UIColour = defaultColour; //current colour to draw the ui in 
 bool bootPlayed = false;
 float atm = 12;
-bool compensation = false; //compensate for sensor reading atm pressure
+float centreX = LV_HOR_RES/2;
+float centreY = LV_VER_RES/2;
+// bool compensation = false; //compensate for sensor reading atm pressure
 float intervalMax = 0; 
 float intervalMin = maxVal;
 std::queue<float> values;
