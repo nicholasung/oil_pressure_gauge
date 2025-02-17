@@ -102,7 +102,7 @@ void applyFontStyle(lv_obj_t* label, int fontSize) {
 }
 
 std::pair<std::pair<float, float>, std::pair<float, float>> calculateTickCoordinates(float degrees, float radius, float centre_x, float centre_y, float tickLength) {
-    float ang_rads = degrees * M_PI / 180;
+    float ang_rads = (degrees + 180) * M_PI / 180; //180 offset 
     float x_end = LV_HOR_RES/2 + radius * sin(ang_rads);
     float y_end = LV_VER_RES/2 + radius * -cos(ang_rads);
     // scale to direction
@@ -126,6 +126,10 @@ std::pair<int, int> tickLabelCoord(std::array<lv_point_precise_t, 2> tick_coords
         float x_text = tick_coords[0].x - dir_x * boldTickLabelOffset;
         float y_text = tick_coords[0].y - dir_y * boldTickLabelOffset;
         return std::make_pair(x_text, y_text);
+}
+
+float valToDeg(float val){
+    return val/maxVal * 360;
 }
 
 void updateLabels() {
@@ -178,7 +182,7 @@ void drawTicks(){
     for(int i = 0; i < numBoldTicks; i++){
         lv_obj_t* currTick = bigTicks[i];
         lv_obj_t* tickLabel = bigTickLabels[i];
-        auto coordinates = calculateTickCoordinates(180 + minAngle + (i * bold_ang_incr), radius, LV_HOR_RES/2, LV_VER_RES/2, boldTicksLength);
+        auto coordinates = calculateTickCoordinates(minAngle + (i * bold_ang_incr), radius, LV_HOR_RES/2, LV_VER_RES/2, boldTicksLength);
         bigTicksCoords[i][0].x = coordinates.first.first;
         bigTicksCoords[i][0].y = coordinates.first.second;
         bigTicksCoords[i][1].x = coordinates.second.first;
@@ -226,7 +230,7 @@ void drawTicks(){
             int index = (n - 1) * numTicks + i - 1;
             lv_obj_t* currTick = smallTicks[index];
             lv_obj_t* tickLabel = smallTickLabels[index];
-            auto coordinates = calculateTickCoordinates(180 + base_ang + (i * small_ang_incr), radius, LV_HOR_RES/2, LV_VER_RES/2, tickLength);
+            auto coordinates = calculateTickCoordinates(base_ang + (i * small_ang_incr), radius, LV_HOR_RES/2, LV_VER_RES/2, tickLength);
             smallTicksCoords[index][0].x = coordinates.first.first;
             smallTicksCoords[index][0].y = coordinates.first.second;
             smallTicksCoords[index][1].x = coordinates.second.first;
@@ -347,15 +351,15 @@ std::pair<int, int> degToCoords(float deg){ //takes an angle and gives coordinat
 
 void drawIntervalTicks(){
     //calculate the angle relative to the ticks to draw them
-    float maxIntAng = intervalMax/maxVal * (maxAngle);
-    float minIntAng = intervalMin/maxVal * (maxAngle);
+    float maxIntAng = intervalMax/maxVal * (maxAngle-minAngle) + minAngle;
+    float minIntAng = intervalMin/maxVal * (maxAngle-minAngle) + minAngle;
     
     Serial.print("MIN INTERVAL ANG: ");
     Serial.println(minIntAng);
     Serial.print("MAX INTERVAL ANG: ");
     Serial.println(maxIntAng);
 
-    std::pair<std::pair<float, float>, std::pair<float, float>> coords = calculateTickCoordinates(intervalMax, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
+    std::pair<std::pair<float, float>, std::pair<float, float>> coords = calculateTickCoordinates(maxIntAng, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
     intervalMaxTickCoords[0].x = coords.first.first;
     intervalMaxTickCoords[0].y = coords.first.second;
     intervalMaxTickCoords[1].x = coords.second.first;
@@ -364,7 +368,7 @@ void drawIntervalTicks(){
     lv_obj_set_style_line_color(intervalMaxTick, intervalMaxColour, LV_PART_MAIN);
     lv_obj_move_foreground(intervalMaxTick);
     
-    coords = calculateTickCoordinates(intervalMin, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength); //MAKE SURE YOU LABEL YOUR PLACEHOLDERS NEXT TIME DUDE
+    coords = calculateTickCoordinates(minIntAng, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength); //MAKE SURE YOU LABEL YOUR PLACEHOLDERS NEXT TIME DUDE
     intervalMinTickCoords[0].x = coords.first.first;
     intervalMinTickCoords[0].y = coords.first.second;
     intervalMinTickCoords[1].x = coords.second.first;
