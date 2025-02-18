@@ -37,7 +37,7 @@ float accelToDeg(float x, float y) { //Assumes usb port is at the bottom
 }
 
 float calibration(float input){ //THE SPECIFIC FUNCTION TO CALIBRATE MY SPECIFIC SENSOR BASED ON EXPERIMENTAL 
-    return -0.0000051349*pow(input,2)+0.0482884*input-24.07043;
+    return 0.000000000490839*pow(input,3)+0.0000308868*pow(input,2)+0.0900421*input-41.43409;
 }
 
 float sensorRead(){
@@ -52,11 +52,13 @@ float sensorRead(){
         float adc = analogRead(adcIO);
         if(calibrationFunction){
             currentVal = calibration(adc);
-            if(adc <= 600){
+            if(adc <= 550){
                 currentVal = 0;
             }
+            Serial.println(adc);
         } else {
             currentVal = (adc/4095*maxVal);
+            
         }
         currentAng = (currentVal/maxVal)*360;
     }
