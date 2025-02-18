@@ -28,13 +28,10 @@ float currentVal = 0;
 float currentAng = 0; //angle to draw the needle in degrees
 lv_color_t UIColour = defaultColour; //current colour to draw the ui in 
 bool bootPlayed = false;
-float atm = 12;
 float centreX = LV_HOR_RES/2;
 float centreY = LV_VER_RES/2;
-// bool compensation = false; //compensate for sensor reading atm pressure
 float intervalMax = 0; 
 float intervalMin = maxVal;
-std::queue<float> values;
 int tickOffset = 180;
 
 //QMI8658 Access
@@ -47,13 +44,13 @@ bool dynamicMax = 0;
 float gradThreshold = 30/maxVal; //percentage below max to start shifting colours
 float warnThreshold = 20/maxVal; //percentage below max to show max warning
 
-    // Big Ticks
+// Big Ticks
 int numBoldTicks = 16; // you need to set this to 1 higher than you actually want?
 int boldTickLabelOffset = 20;
 int boldTicksLength = 24;
 int bigFontOffset = 4;
 
-    //Small Ticks
+//Small Ticks
 int numTicks = 1; //Number per sector between bold ticks (if you only want small ticks just use big ticks to 2 for min and max and set this to number between desired)
 int totalSmallTicks = (numBoldTicks-1)*numTicks;
 int tickLabelOffset = 8;
@@ -66,7 +63,12 @@ lv_obj_t *screen;
 lv_obj_t *readout;
 lv_obj_t *units;
 lv_obj_t *needle;
+lv_obj_t *intervalMaxTick;
+lv_obj_t *intervalMinTick;
+lv_point_precise_t intervalMaxTickCoords[2];
+lv_point_precise_t intervalMinTickCoords[2];
 lv_point_precise_t needle_coords[2];
+
 std::vector<lv_obj_t*> bigTicks(numBoldTicks);
 std::vector<lv_obj_t*> smallTicks(totalSmallTicks); 
 std::vector<lv_obj_t*> bigTickLabels(numBoldTicks);
@@ -76,9 +78,3 @@ std::vector<std::string> smallTickStringLabels(totalSmallTicks);
 std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords(numBoldTicks);
 std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords(totalSmallTicks);
 
-lv_obj_t *intervalMaxTick;
-lv_obj_t *intervalMinTick;
-lv_point_precise_t intervalMaxTickCoords[2];
-lv_point_precise_t intervalMinTickCoords[2];
-// std::array<lv_point_precise_t, 2> intervalMaxTickCoords;
-// std::array<lv_point_precise_t, 2> intervalMinTickCoords;
