@@ -17,6 +17,7 @@ extern float maxAngle; // min and max angle for the needle
 extern float minAngle; // 
 extern lv_color_t backgroundColour; //background colour in hex (#rrggbb)
 extern lv_color_t defaultColour; //default colour to draw ui in
+extern lv_color_t needleColour;
 extern int readoutDeci;
 extern bool intervalTicks;
 extern int intervalTickLength;

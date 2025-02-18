@@ -6,11 +6,12 @@ float maxAngle = 315; // min and max angle for the needle
 float minAngle = 45; // 
 lv_color_t backgroundColour = lv_color_hex(0x000000); //background colour in hex (#rrggbb)
 lv_color_t defaultColour = lv_color_hex(0xFFFFFF); //default colour to draw ui in
+lv_color_t needleColour = lv_color_hex(0xFF0000);
 int readoutDeci = 0;
 bool intervalTicks = true;
 int intervalTickLength = 30; 
-lv_color_t intervalMaxColour = lv_color_hex(0x00FF00);
-lv_color_t intervalMinColour = lv_color_hex(0x0000FF);
+lv_color_t intervalMaxColour = lv_color_hex(0xFFFF00);
+lv_color_t intervalMinColour = lv_color_hex(0xFFFF00);
 
 
 //Sensor Info
@@ -21,7 +22,7 @@ float maxVReadout = 0.9; // max expected voltage as a percentage of input voltag
 float maxVal = 150; //Min and Max expected readouts from sensor
 float minVal = 0; 
 float zeroOffset = 19;
-bool calibrationFunction = false;
+bool calibrationFunction = true;
 
 //Global Access
 float currentVal = 0;

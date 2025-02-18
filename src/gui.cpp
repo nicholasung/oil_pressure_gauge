@@ -286,7 +286,7 @@ void guiInit(){
     lv_obj_align(needle, LV_ALIGN_OUT_TOP_LEFT, 0, 0); // Align the line to the center of the screen
     // Set the style of the needle
     lv_obj_set_style_line_width(needle, 2, LV_PART_MAIN);
-    lv_obj_set_style_line_color(needle, UIColour, LV_PART_MAIN);
+    lv_obj_set_style_line_color(needle, needleColour, LV_PART_MAIN);
     initIntervalTicks();
     drawTicks();
 }
@@ -334,7 +334,7 @@ void drawDial(){
     needle_coords[0].x = LV_HOR_RES/2; 
     needle_coords[0].y = LV_VER_RES/2; 
     lv_line_set_points(needle, needle_coords, 2); // Set the points
-    lv_obj_set_style_line_color(needle, UIColour, LV_PART_MAIN); 
+    // lv_obj_set_style_line_color(needle, needleColour, LV_PART_MAIN); 
     lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
     lv_obj_set_style_text_color(units, UIColour, LV_PART_MAIN);
 
