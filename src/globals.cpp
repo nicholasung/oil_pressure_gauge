@@ -1,11 +1,4 @@
-#include <Arduino.h>
-#include <CST816S.h>
-#include <lib_cfgs/CST816S_pin_config.h>
-#include <lvgl.h>
-#include <vector>
-#include <queue>
-#include <string>
-#include "SensorQMI8658.hpp"
+#include "./globals.h"
 
 //UI Settings
 char * unitLabel = "PSI"; //units

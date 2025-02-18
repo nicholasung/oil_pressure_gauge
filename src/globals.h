@@ -3,6 +3,7 @@
 #include <lib_cfgs/CST816S_pin_config.h>
 #include <lvgl.h>
 #include <queue>
+#include <vector>
 #include "SensorQMI8658.hpp"
 #include <string>
 
