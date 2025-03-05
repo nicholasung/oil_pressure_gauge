@@ -257,7 +257,7 @@ void initIntervalTicks(){
     lv_obj_set_style_line_color(intervalMinTick, intervalMinColour, LV_PART_MAIN);
 }
 
-void guiInit(){
+void guiInitDefault(){
     // Set the background color
     initFontStyles();
     screen = lv_scr_act();
@@ -269,7 +269,7 @@ void guiInit(){
     lv_obj_align( readout, LV_ALIGN_CENTER, 0, 80);
     lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
     applyFontStyle(readout, 20);
-    
+
     units = lv_label_create( lv_screen_active() );
     lv_label_set_text( units, unitLabel);
     lv_obj_align( units, LV_ALIGN_CENTER, 0, 60);
@@ -289,6 +289,44 @@ void guiInit(){
     lv_obj_set_style_line_color(needle, needleColour, LV_PART_MAIN);
     initIntervalTicks();
     drawTicks();
+}
+
+void guiInitDigi(){
+    // Set the background color
+    initFontStyles();
+    screen = lv_scr_act();
+    lv_obj_set_style_bg_color(screen, backgroundColour, LV_PART_MAIN);
+
+    //GUI INIT
+    readout = lv_label_create( lv_screen_active() );
+    lv_label_set_text( readout, "Welcome" );
+    lv_obj_align( readout, LV_ALIGN_CENTER, LV_HOR_RES/2, needle_coords[0].y);
+    lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
+    applyFontStyle(readout, 20);
+
+    units = lv_label_create( lv_screen_active() );
+    lv_label_set_text( units, unitLabel);
+    lv_obj_align( units, LV_ALIGN_CENTER, 0, 60);
+    lv_obj_set_style_text_color(units, backgroundColour , LV_PART_MAIN);
+    applyFontStyle(units, 12);
+}
+
+void guiInit(){
+    switch(UIMode){
+        case 0:
+            guiInitDefault();
+            break;
+        
+        case 1:
+            guiInitDigi();
+            break;
+
+        default:
+            guiInitDefault();
+            break;  
+    }
+
+    
 }
 
 void drawIntervalTicks(){
@@ -317,7 +355,7 @@ void drawIntervalTicks(){
     lv_obj_move_foreground(intervalMinTick);
 }
 
-void drawDial(){    
+void drawDial(){
     //Draw Readout
     buffer[8]; // Buffer to hold the formatted string
     sprintf(buffer, "%.2f", currentVal); // Convert float to string with 2 decimal places
@@ -344,6 +382,33 @@ void drawDial(){
     needle_coords[1].x = coords.first;
     needle_coords[1].y = coords.second;  
     lv_obj_move_foreground(needle);  
+}
+
+void drawDigi(){
+    //Draw Readout
+    buffer[8]; // Buffer to hold the formatted string
+    sprintf(buffer, "%.2f", currentVal); // Convert float to string with 2 decimal places
+    lv_label_set_text(readout, buffer);
+
+    //draw units
+    lv_label_set_text(units, unitLabel);
+}
+
+
+void drawUI(){    
+    switch(UIMode){
+        case 0:
+            drawDial();
+            break;
+        
+        case 1:
+            drawDigi();
+            break;
+
+        default:
+            drawDial();
+            break;        
+    }
 }
 
 void bootAnimation(){

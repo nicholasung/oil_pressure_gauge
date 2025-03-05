@@ -13,6 +13,8 @@ int intervalTickLength = 30;
 lv_color_t intervalMaxColour = lv_color_hex(0xFFFF00);
 lv_color_t intervalMinColour = lv_color_hex(0xFFFF00);
 
+int UIMode = 0;
+
 
 //Sensor Info
 int sensorType = 1; // 0 reads internal accel for the orientation, 1 reads defined analog pin

@@ -118,7 +118,7 @@ void loop(){
         UIColour = defaultColour;
     }
     sensorRead();
-    drawDial();
+    drawUI();
 
     // if (!bootPlayed) {
     //     bootAnimation();

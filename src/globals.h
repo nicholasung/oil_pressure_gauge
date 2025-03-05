@@ -24,6 +24,8 @@ extern int intervalTickLength;
 extern lv_color_t intervalMaxColour;
 extern lv_color_t intervalMinColour; 
 
+extern int UIMode;
+
 //Sensor Info
 extern int sensorType; // 0 reads internal accel for the orientation, 1 reads defined analog pin
 extern int analogPin;

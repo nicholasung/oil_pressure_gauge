@@ -57,7 +57,7 @@ static lv_style_t style_font_14;
 // extern lv_obj_t* intervalMinTick;
 // extern int intervalTickLength; 
 
-void drawDial();
+void drawUI();
 void bootAnimation();
 void guiInit();
 void updateLabels();
