@@ -77,7 +77,7 @@ void setup(){
 
     guiInit();
 
-    Serial.println("END SETUP");
+    // Serial.println("END SETUP");
     sensorInit();
     loop();
 }

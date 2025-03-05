@@ -300,7 +300,7 @@ void guiInitDigi(){
     //GUI INIT
     readout = lv_label_create( lv_screen_active() );
     lv_label_set_text( readout, "Welcome" );
-    lv_obj_align( readout, LV_ALIGN_CENTER, LV_HOR_RES/2, needle_coords[0].y);
+    lv_obj_align( readout, LV_ALIGN_CENTER, 0, 0);
     lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
     applyFontStyle(readout, 20);
 
@@ -392,6 +392,8 @@ void drawDigi(){
 
     //draw units
     lv_label_set_text(units, unitLabel);
+    lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
+    lv_obj_set_style_text_color(units, UIColour, LV_PART_MAIN);
 }
 
 
