@@ -358,7 +358,12 @@ void drawIntervalTicks(){
 void drawDial(){
     //Draw Readout
     buffer[8]; // Buffer to hold the formatted string
-    sprintf(buffer, "%.2f", currentVal); // Convert float to string with 2 decimal places
+    if(currentVal >= 145){
+        strncpy(buffer, "HIGH", sizeof(buffer) - 1);
+        buffer[sizeof(buffer) - 1] = '\0';
+    } else {
+        sprintf(buffer, "%.2f", currentVal); // Convert float to string with 2 decimal places
+    }
     lv_label_set_text(readout, buffer);
 
     //draw units
@@ -376,7 +381,9 @@ void drawDial(){
     lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
     lv_obj_set_style_text_color(units, UIColour, LV_PART_MAIN);
 
-
+    if(currentVal >= 145){
+        currentAng = 360;
+    }
     //set needle direction
     std::pair coords = degToCoords(currentAng);
     needle_coords[1].x = coords.first;
