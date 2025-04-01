@@ -4,6 +4,7 @@ char buffer[10]; // Buffer to hold the formatted string
 int animation_angle = 0;
 int radius = 120;
 extern bool bootPlayed;
+extern int highVal;
 bool reverse = false;
 
 void initFontStyles() {
@@ -358,7 +359,7 @@ void drawIntervalTicks(){
 void drawDial(){
     //Draw Readout
     buffer[8]; // Buffer to hold the formatted string
-    if(currentVal >= 110){
+    if(currentVal >= highVal){
         strncpy(buffer, "HIGH", sizeof(buffer) - 1);
         buffer[sizeof(buffer) - 1] = '\0';
     } else {
@@ -381,7 +382,7 @@ void drawDial(){
     lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
     lv_obj_set_style_text_color(units, UIColour, LV_PART_MAIN);
 
-    if(currentVal >= 145){
+    if(currentVal >= highVal){
         currentAng = 360;
     }
     //set needle direction

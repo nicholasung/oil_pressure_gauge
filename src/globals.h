@@ -57,6 +57,7 @@ extern IMUdata gyr;
 extern bool dynamicMax;
 extern float gradThreshold; //percentage below max to start shifting colours
 extern float warnThreshold; //percentage below max to show max warning
+extern int highVal;
 
 // Big Ticks
 extern int numBoldTicks;

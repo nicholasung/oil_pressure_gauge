@@ -46,9 +46,10 @@ IMUdata gyr;
 bool dynamicMax = 0;
 float gradThreshold = 40/maxVal; //percentage below max to start shifting colours
 float warnThreshold = 25/maxVal; //percentage below max to show max warning
+int highVal = 105;
 
 // Big Ticks
-int numBoldTicks = 16; // you need to set this to 1 higher than you actually want?
+int numBoldTicks = 11; // you need to set this to 1 higher than you actually want?
 int boldTickLabelOffset = 20;
 int boldTicksLength = 24;
 int bigFontOffset = 4;
