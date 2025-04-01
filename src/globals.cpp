@@ -21,7 +21,7 @@ int sensorType = 1; // 0 reads internal accel for the orientation, 1 reads defin
 int analogPin = 15;
 float maxVReadout = 0.9; // max expected voltage as a percentage of input voltage
 
-float maxVal = 150; //Min and Max expected readouts from sensor
+float maxVal = 100; //Min and Max expected readouts from sensor
 float minVal = 0; 
 float zeroOffset = 19;
 bool calibrationFunction = true;

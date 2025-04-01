@@ -358,7 +358,7 @@ void drawIntervalTicks(){
 void drawDial(){
     //Draw Readout
     buffer[8]; // Buffer to hold the formatted string
-    if(currentVal >= 145){
+    if(currentVal >= 110){
         strncpy(buffer, "HIGH", sizeof(buffer) - 1);
         buffer[sizeof(buffer) - 1] = '\0';
     } else {
