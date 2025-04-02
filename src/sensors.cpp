@@ -41,26 +41,32 @@ float calibration(float input){ //THE SPECIFIC FUNCTION TO CALIBRATE MY SPECIFIC
 }
 
 float sensorRead(){
+    float val;
     if(sensorType == 0){
         if (qmi.getDataReady()) {
             qmi.getAccelerometer(acc.x, acc.y, acc.z);
             currentAng = accelToDeg(acc.x, acc.y);
+            val = currentAng;
             // Serial.println(currentAng);
             // Serial.println(analogRead(15));
         }
     } else if (sensorType == 1) {
-        float adc = analogRead(adcIO);
-        if(calibrationFunction){
-            currentVal = calibration(adc);
-            if(adc <= 550){
-                currentVal = 0;
-            }
-            Serial.println(adc);
-        } else {
-            currentVal = (adc/4095*maxVal);
-            
-        }
-        currentAng = (currentVal/maxVal)*360;
+        val = analogRead(adcIO);
     }
-    return currentAng;
+    return val;
 };
+
+float valToAng(float val){
+    
+    if(calibrationFunction){
+        currentVal = calibration(val);
+        if(val <= 550){ //this is a magic number for my use
+            currentVal = 0;
+        }
+        Serial.println(val);
+    } else {
+        currentVal = (val/4095*maxVal);
+        
+    }
+    currentAng = (currentVal/maxVal)*360;
+}

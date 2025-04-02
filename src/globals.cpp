@@ -9,9 +9,11 @@ lv_color_t defaultColour = lv_color_hex(0xFFFFFF); //default colour to draw ui i
 lv_color_t needleColour = lv_color_hex(0xFF0000);
 int readoutDeci = 0;
 bool intervalTicks = true;
+bool averageReadings = true;
 int intervalTickLength = 30; 
 lv_color_t intervalMaxColour = lv_color_hex(0xFFFF00);
 lv_color_t intervalMinColour = lv_color_hex(0xFFFF00);
+
 
 int UIMode = 0;
 
@@ -29,6 +31,7 @@ bool calibrationFunction = true;
 //Global Access
 float currentVal = 0;
 float currentAng = 0; //angle to draw the needle in degrees
+float nextFrameVal = 0;
 lv_color_t UIColour = defaultColour; //current colour to draw the ui in 
 bool bootPlayed = false;
 float centreX = LV_HOR_RES/2;

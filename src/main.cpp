@@ -10,7 +10,7 @@
 #include <TFT_eSPI.h>
 #endif
 
-#define LOOP_INTERVAL 4//refresh 250 times a second
+#define LOOP_INTERVAL 16//refresh 60 (ish) times a second
 
 extern bool bootPlayed;
 extern bool dynamicMax;
@@ -24,8 +24,8 @@ extern lv_color_t defaultColour;
 extern float intervalMax;
 extern float intervalMin;
 extern bool intervalTicks;
-
-int MAX_QUEUE_SIZE = 100;
+extern float nextFrameVal;
+extern bool averageReadings;
 
 
 CST816S touch(TOUCH_SDA, TOUCH_SCL, TOUCH_RST, TOUCH_IRQ);
@@ -86,8 +86,6 @@ void loop(){
     static unsigned long lastExecutionTime = 0;
     unsigned long currentTime = millis();
 
-    if (currentTime - lastExecutionTime >= LOOP_INTERVAL) lastExecutionTime = currentTime;
-
     lv_timer_handler();
     if(dynamicMax){
         if(currentVal > maxVal) maxVal = currentVal;
@@ -118,7 +116,19 @@ void loop(){
         UIColour = defaultColour;
     }
     sensorRead();
-    drawUI();
+    //updates the current value weighted to the most recent reading. sacrifices accuracy for "smoothness"
+    if (averageReadings){
+        nextFrameVal = currentVal + nextFrameVal;
+        nextFrameVal /= 2;
+    }
+    if (currentTime - lastExecutionTime >= LOOP_INTERVAL){
+        lastExecutionTime = currentTime;
+        if(averageReadings){
+            currentAng = valToAng(nextFrameVal);
+        }
+        drawUI();
+    } 
+    
 
     // if (!bootPlayed) {
     //     bootAnimation();
