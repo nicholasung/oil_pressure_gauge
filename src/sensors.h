@@ -23,3 +23,4 @@
 
 void sensorInit();
 float sensorRead();
+float valToAng(float val);

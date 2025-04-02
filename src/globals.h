@@ -20,6 +20,7 @@ extern lv_color_t defaultColour; //default colour to draw ui in
 extern lv_color_t needleColour;
 extern int readoutDeci;
 extern bool intervalTicks;
+extern bool averageReadings;
 extern int intervalTickLength;
 extern lv_color_t intervalMaxColour;
 extern lv_color_t intervalMinColour; 
@@ -39,6 +40,7 @@ extern bool calibrationFunction;
 //Global Access
 extern float currentVal;
 extern float currentAng; //angle to draw the needle in degrees
+extern float nextFrameVal;
 extern lv_color_t UIColour; //current colour to draw the ui in 
 extern bool bootPlayed;
 extern float centreX;
