@@ -53,23 +53,20 @@ float sensorRead(){
     } else if (sensorType == 1) {
         val = analogRead(adcIO);
     }
-    valToAng(val);
     return val;
 };
 
 float valToAng(float val){
+    
     if(calibrationFunction){
         currentVal = calibration(val);
         if(val <= 550){ //this is a magic number for my use
             currentVal = 0;
         }
         Serial.println(val);
-    } else if(averageReadings){
-        currentVal = nextFrameVal;
-        currentAng = (currentVal/maxVal)*360;
     } else {
         currentVal = (val/4095*maxVal);
         
     }
-    return currentVal;
+    currentAng = (currentVal/maxVal)*360;
 }

@@ -118,15 +118,14 @@ void loop(){
     sensorRead();
     //updates the current value weighted to the most recent reading. sacrifices accuracy for "smoothness"
     if (averageReadings){
-        nextFrameVal = currentVal + 3*nextFrameVal;
-        nextFrameVal /= 4.f;
-        Serial.print("nfv: ");
-        Serial.println(nextFrameVal);
-        Serial.print("ang: ");
-        Serial.println(currentAng);
+        nextFrameVal = currentVal + nextFrameVal;
+        nextFrameVal /= 2;
     }
     if (currentTime - lastExecutionTime >= LOOP_INTERVAL){
         lastExecutionTime = currentTime;
+        if(averageReadings){
+            currentAng = valToAng(nextFrameVal);
+        }
         drawUI();
     } 
     
