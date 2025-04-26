@@ -10,7 +10,7 @@
 #include <TFT_eSPI.h>
 #endif
 
-#define LOOP_INTERVAL 16//refresh 60 (ish) times a second
+#define LOOP_INTERVAL 4//refresh approx 240 times a second
 
 extern bool bootPlayed;
 extern bool dynamicMax;
