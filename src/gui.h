@@ -22,5 +22,6 @@ void drawUI();
 void bootAnimation();
 void guiInit();
 void updateLabels();
+void toggleColour();
 float valToDeg(float val);
 float scaleDeg(float val);

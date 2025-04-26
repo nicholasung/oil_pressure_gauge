@@ -48,7 +48,7 @@ extern float centreY;
 extern float intervalMax;
 extern float intervalMin;
 extern int tickOffset;
-
+extern bool darkMode;
 
 //QMI8658 Access
 extern SensorQMI8658 qmi;

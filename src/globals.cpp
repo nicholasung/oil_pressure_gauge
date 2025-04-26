@@ -36,6 +36,7 @@ float centreY = LV_VER_RES/2;
 float intervalMax = 0; 
 float intervalMin = maxVal;
 int tickOffset = 180;
+bool darkMode = true;
 
 //QMI8658 Access
 SensorQMI8658 qmi;

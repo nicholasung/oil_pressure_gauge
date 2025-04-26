@@ -151,7 +151,7 @@ void drawTicks(){
         lv_line_set_points(currTick, bigTicksCoords[i].data(), 2);
         lv_obj_align(currTick, LV_ALIGN_OUT_TOP_LEFT, 0, 0); 
         lv_obj_set_style_line_width(currTick, 2, LV_PART_MAIN);
-        lv_obj_set_style_line_color(currTick, UIColour, LV_PART_MAIN);
+        lv_obj_set_style_line_color(currTick, defaultColour, LV_PART_MAIN);
         bigTicks[i] = currTick;
 
         //make the label
@@ -175,7 +175,7 @@ void drawTicks(){
         lv_label_set_text(tickLabel, buffer);
         lv_obj_align(tickLabel, LV_ALIGN_OUT_TOP_LEFT, adjusted_x - 3*bigFontOffset, adjusted_y - 2*bigFontOffset);
 
-        lv_obj_set_style_text_color(tickLabel, UIColour, LV_PART_MAIN);
+        lv_obj_set_style_text_color(tickLabel, defaultColour, LV_PART_MAIN);
         applyFontStyle(tickLabel, 14);
         bigTickLabels[i] = tickLabel;
     }
@@ -199,7 +199,7 @@ void drawTicks(){
             lv_line_set_points(currTick, smallTicksCoords[index].data(), 2);
             lv_obj_align(currTick, LV_ALIGN_OUT_TOP_LEFT, 0, 0); 
             lv_obj_set_style_line_width(currTick, 2, LV_PART_MAIN);
-            lv_obj_set_style_line_color(currTick, UIColour, LV_PART_MAIN);
+            lv_obj_set_style_line_color(currTick, defaultColour, LV_PART_MAIN);
             smallTicks[index] = currTick;
             if(smallTickLabel == 1){
                 tickLabel = lv_label_create( lv_screen_active() );
@@ -223,7 +223,7 @@ void drawTicks(){
                 lv_label_set_text(tickLabel, buffer);
                 lv_obj_align(tickLabel, LV_ALIGN_OUT_TOP_LEFT, adjusted_x - 4*smallFontOffset , adjusted_y - 3*smallFontOffset);
 
-                lv_obj_set_style_text_color(tickLabel, UIColour, LV_PART_MAIN);
+                lv_obj_set_style_text_color(tickLabel, defaultColour, LV_PART_MAIN);
                 applyFontStyle(tickLabel, 12);
                 smallTickLabels[index] = tickLabel;
             }
@@ -266,9 +266,9 @@ void guiInitDefault(){
 
     //GUI INIT
     readout = lv_label_create( lv_screen_active() );
-    lv_label_set_text( readout, "Welcome" );
+    lv_label_set_text( readout, "BOOTING" );
     lv_obj_align( readout, LV_ALIGN_CENTER, 0, 80);
-    lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
+    lv_obj_set_style_text_color(readout, defaultColour, LV_PART_MAIN);
     applyFontStyle(readout, 20);
 
     units = lv_label_create( lv_screen_active() );
@@ -288,7 +288,9 @@ void guiInitDefault(){
     // Set the style of the needle
     lv_obj_set_style_line_width(needle, 2, LV_PART_MAIN);
     lv_obj_set_style_line_color(needle, needleColour, LV_PART_MAIN);
-    initIntervalTicks();
+    if(intervalTicks){
+        initIntervalTicks();
+    }
     drawTicks();
 }
 
@@ -327,6 +329,22 @@ void guiInit(){
             break;  
     }
 
+    
+}
+
+void toggleColour(){ //the hex operations can probably be done much much nicer
+    if(darkMode){
+        backgroundColour = lv_color_hex(0xFFFFFF);
+        defaultColour = lv_color_hex(0x000000);
+        darkMode = false;
+    } else {
+        backgroundColour = lv_color_hex(0x000000);
+        defaultColour = lv_color_hex(0xFFFFFF);
+        darkMode = true;
+    }
+    Serial.println("SWITCH!!");
+    // probably needs a way to kill all the old stuff
+    drawTicks();
     
 }
 

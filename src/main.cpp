@@ -10,7 +10,7 @@
 #include <TFT_eSPI.h>
 #endif
 
-#define LOOP_INTERVAL 16//refresh 60 (ish) times a second
+#define LOOP_INTERVAL 4 //refresh 250 (ish) times a second
 
 extern bool bootPlayed;
 extern bool dynamicMax;
@@ -99,13 +99,22 @@ void loop(){
         if(currentVal <= intervalMin){
             intervalMin = currentVal;
         };
-        
-        if (touch.available()) { //basically if any form of touch happens
-            //effective reset of interval
-            intervalMax = currentVal;
-            intervalMin = currentVal;
+    }
+
+    if (touch.available()) { //basically if any form of touch happens
+        // //effective reset of interval
+        // if(intervalTicks){
+        //     intervalMax = currentVal;
+        //     intervalMin = currentVal;
+        // } else {
+        //     toggleColour();
+        // } 
+        String gesture = touch.gesture();
+        if(gesture = "SINGLE CLICK"){
+            toggleColour();
         }
     }
+
 
     float ofMax = currentVal / maxVal;
     if(ofMax < warnThreshold){
