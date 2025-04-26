@@ -116,16 +116,8 @@ void loop(){
         UIColour = defaultColour;
     }
     sensorRead();
-    //updates the current value weighted to the most recent reading. sacrifices accuracy for "smoothness"
-    if (averageReadings){
-        nextFrameVal = currentVal + nextFrameVal;
-        nextFrameVal /= 2;
-    }
     if (currentTime - lastExecutionTime >= LOOP_INTERVAL){
         lastExecutionTime = currentTime;
-        if(averageReadings){
-            currentAng = valToAng(nextFrameVal);
-        }
         drawUI();
     } 
     
