@@ -81,4 +81,3 @@ std::vector<std::string> bigTickStringLabels(numBoldTicks);
 std::vector<std::string> smallTickStringLabels(totalSmallTicks);
 std::vector<std::array<lv_point_precise_t, 2>> bigTicksCoords(numBoldTicks);
 std::vector<std::array<lv_point_precise_t, 2>> smallTicksCoords(totalSmallTicks);
-
