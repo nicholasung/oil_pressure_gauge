@@ -23,7 +23,7 @@ float maxVReadout = 0.9; // max expected voltage as a percentage of input voltag
 
 float maxVal = 100; //Min and Max expected readouts from sensor
 float minVal = 0; 
-float zeroOffset = 19;
+float zeroOffset = 19; //aprox one atm so the sensor does not include air pressure
 bool calibrationFunction = true;
 
 //Global Access
@@ -44,19 +44,19 @@ IMUdata gyr;
 
 //General Settings
 bool dynamicMax = 0;
-float gradThreshold = 40/maxVal; //percentage below max to start shifting colours
-float warnThreshold = 25/maxVal; //percentage below max to show max warning
+float gradThreshold = 30/maxVal; //percentage below max to start shifting colours
+float warnThreshold = 20/maxVal; //percentage below max to show max warning
 int highVal = 105;
 
 // Big Ticks
-int numBoldTicks = 11; // you need to set this to 1 higher than you actually want?
+int numBoldTicks = 10; // you need to set this to 1 higher than you actually want?
 int boldTickLabelOffset = 20;
 int boldTicksLength = 24;
 int bigFontOffset = 4;
 
 //Small Ticks
 int numTicks = 1; //Number per sector between bold ticks (if you only want small ticks just use big ticks to 2 for min and max and set this to number between desired)
-int totalSmallTicks = (numBoldTicks-1)*numTicks;
+int totalSmallTicks = numBoldTicks*numTicks;
 int tickLabelOffset = 8;
 int tickLength = 8;
 int smallFontOffset = 2;
