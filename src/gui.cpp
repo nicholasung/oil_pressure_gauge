@@ -92,13 +92,13 @@ std::pair<int, int> tickLabelCoord(std::array<lv_point_precise_t, 2> tick_coords
 }
 
 void updateLabels() {
-    float bold_label_incr = (maxVal - minVal) / numBoldTicks;
-    float small_label_incr = (maxVal - minVal) / ((numTicks + 1) * numBoldTicks);
+    float bold_label_incr = (maxVal - minVal) / (numBoldTicks - 1);
+    float small_label_incr = (maxVal - minVal) / ((numTicks + 1) * (numBoldTicks - 1));
     float label;
     char buffer[20]; // Buffer to hold the formatted string
 
     // Update big tick labels
-    for (int i = 0; i <= numBoldTicks; i++) {
+    for (int i = 0; i < numBoldTicks; i++) {
         label = minVal + i * bold_label_incr;
         sprintf(buffer, "%.0f", label);
         bigTickStringLabels[i] = buffer;
@@ -114,7 +114,7 @@ void updateLabels() {
 
     if(smallTickLabel == 1){
         // Update small tick labels
-        for (int n = 1; n <= numBoldTicks; n++) {
+        for (int n = 1; n <= numBoldTicks - 1; n++) {
             for (int i = 1; i <= numTicks; i++) {
                 int index = (n - 1) * numTicks + i - 1;
                 label = minVal + i*small_label_incr+small_label_incr*(n-1)*(numTicks+1);
@@ -135,8 +135,8 @@ void updateLabels() {
 }
 
 void drawTicks(){
-    float bold_ang_incr = (maxAngle - minAngle) / numBoldTicks;
-    float bold_label_incr = (maxVal - minVal) / numBoldTicks; //the - 1 on these calulcations is a dirty quick fix
+    float bold_ang_incr = (maxAngle - minAngle) / (numBoldTicks - 1);
+    float bold_label_incr = (maxVal - minVal) / (numBoldTicks - 1); //the - 1 on these calulcations is a dirty quick fix
     float label;
     for(int i = 0; i < numBoldTicks; i++){
         lv_obj_t* currTick = bigTicks[i];
@@ -182,9 +182,9 @@ void drawTicks(){
 
     float small_ang_incr = bold_ang_incr / (numTicks + 1);
     float small_label_incr; 
-    if(smallTickLabel == 1) small_label_incr = (maxVal - minVal) / ((numTicks+1)*numBoldTicks); 
+    if(smallTickLabel == 1) small_label_incr = (maxVal - minVal) / ((numTicks+1)*(numBoldTicks-1)); 
     float base_ang = 0;
-    for(int n = 1; n <= numBoldTicks; n++){
+    for(int n = 1; n <= numBoldTicks - 1; n++){
         for(int i = 1; i <= numTicks; i++){
             int index = (n - 1) * numTicks + i - 1;
             lv_obj_t* currTick = smallTicks[index];
