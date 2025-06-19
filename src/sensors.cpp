@@ -37,7 +37,8 @@ float accelToDeg(float x, float y) { //Assumes usb port is at the bottom
 }
 
 float calibration(float input){ //THE SPECIFIC FUNCTION TO CALIBRATE MY SPECIFIC SENSOR BASED ON EXPERIMENTAL 
-    return 0.00000000490839*pow(input,3)+(-0.0000308868*pow(input,2))+(0.0900421*input)-41.43409;
+    // return 0.00000000490839*pow(input,3)+(-0.0000308868*pow(input,2))+(0.0900421*input)-41.43409;
+    return input;
 }
 
 float sensorRead(){
