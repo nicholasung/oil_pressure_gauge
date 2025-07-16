@@ -259,7 +259,6 @@ void initIntervalTicks(){
     lv_obj_set_style_line_width(intervalMinTick, 2, LV_PART_MAIN);
     lv_obj_set_style_line_color(intervalMinTick, intervalMinColour, LV_PART_MAIN);
 }
-lv_circle_radius
 
 void guiInitDefault(){
     // Set the background color
@@ -380,12 +379,12 @@ void drawDial(){
         drawIntervalTicks();
     }
     if(minMaxTickMode == 1){ //red when recording
-        intervalMaxColour = lv_color_hex(0xFF0000)
-        intervalMinColour = lv_color_hex(0xFF0000)
+        intervalMaxColour = lv_color_hex(0xFF0000);
+        intervalMinColour = lv_color_hex(0xFF0000);
     } 
     if(minMaxTickMode == 2){ //yellow when frozen
-        intervalMaxColour = lv_color_hex(0xFFFF00)
-        intervalMinColour = lv_color_hex(0xFFFF00)
+        intervalMaxColour = lv_color_hex(0xFFFF00);
+        intervalMinColour = lv_color_hex(0xFFFF00);
     } 
 
     //draw needle

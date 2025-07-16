@@ -92,16 +92,15 @@ void loop(){
         if(currentVal > maxVal) maxVal = currentVal;
         updateLabels();
     }
-
-    if(touch.available()){
-        if(minMaxTickMode =< 3){
+    if(touch.gesture() == "SINGLE CLICK"){
+        if(minMaxTickMode <= 3){
             minMaxTickMode = 0;
         } else {
             minMaxTickMode++;
         }
     }
 
-    if(minMaxTickMode == 1;){
+    if(minMaxTickMode == 1){
         if(currentVal >= intervalMax){
             intervalMax = currentVal;
         };
