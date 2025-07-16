@@ -377,6 +377,10 @@ void drawDial(){
     
     if(minMaxTickMode > 0){
         drawIntervalTicks();
+    } 
+    if(minMaxTickMode == 1 || minMaxTickMode == 3) { //poor way to hide it when its not being drawn...
+        intervalMaxColour = lv_color_hex(0x000000);
+        intervalMinColour = lv_color_hex(0x000000);
     }
     if(minMaxTickMode == 1){ //red when recording
         intervalMaxColour = lv_color_hex(0xFF0000);

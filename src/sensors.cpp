@@ -55,7 +55,7 @@ float sensorRead(){
             if(adc <= 550){
                 currentVal = 0;
             }
-            Serial.println(adc);
+            // Serial.println(adc);
         } else {
             currentVal = (adc/4095*maxVal);   
         }

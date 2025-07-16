@@ -13,8 +13,7 @@
 #define LOOP_INTERVAL 4//refresh 60 (ish) times a second
 
 //KNOWN BUGS
-// in 0 mode the ticks do not dissappear
-// in active mode the max interval tick over rotates beyond the deadzone
+// in 0 mode acts as a secondary frozen mode
 // change the touch debounce to a multiplier of LOOP_INTERVAL
 
 extern bool bootPlayed;
@@ -99,17 +98,20 @@ void loop(){
     }
     if(touch.available()){
         delay(100); //arbitrary debounce number
+        minMaxTickMode++;
         Serial.println(minMaxTickMode);
         if(minMaxTickMode == 3){
             minMaxTickMode = 0;
-        } else {
-            minMaxTickMode++;
         }
     }
 
     if(minMaxTickMode == 1){
         if(currentVal >= intervalMax){
-            intervalMax = currentVal;
+            if(currentVal > maxVal){
+                intervalMax = maxVal;
+            } else {
+                intervalMax = currentVal;
+            }
         };
         if(currentVal <= intervalMin){
             intervalMin = currentVal;
