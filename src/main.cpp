@@ -12,6 +12,11 @@
 
 #define LOOP_INTERVAL 4//refresh 60 (ish) times a second
 
+//KNOWN BUGS
+// in 0 mode the ticks do not dissappear
+// in active mode the max interval tick over rotates beyond the deadzone
+// change the touch debounce to a multiplier of LOOP_INTERVAL
+
 extern bool bootPlayed;
 extern bool dynamicMax;
 extern float maxVal;
@@ -92,8 +97,10 @@ void loop(){
         if(currentVal > maxVal) maxVal = currentVal;
         updateLabels();
     }
-    if(touch.gesture() == "SINGLE CLICK"){
-        if(minMaxTickMode <= 3){
+    if(touch.available()){
+        delay(100); //arbitrary debounce number
+        Serial.println(minMaxTickMode);
+        if(minMaxTickMode == 3){
             minMaxTickMode = 0;
         } else {
             minMaxTickMode++;
