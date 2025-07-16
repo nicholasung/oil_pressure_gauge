@@ -5,6 +5,7 @@ int animation_angle = 0;
 int radius = 120;
 extern bool bootPlayed;
 extern int highVal;
+extern int minMaxTickMode;
 bool reverse = false;
 
 void initFontStyles() {
@@ -234,6 +235,7 @@ void drawTicks(){
 }
 
 void initIntervalTicks(){
+
     std::pair<std::pair<float, float>, std::pair<float, float>> coords = calculateTickCoordinates(currentAng, radius, LV_HOR_RES/2, LV_VER_RES/2, intervalTickLength);
     intervalMaxTickCoords[0].x = coords.first.first;
     intervalMaxTickCoords[0].y = coords.first.second;
@@ -257,6 +259,7 @@ void initIntervalTicks(){
     lv_obj_set_style_line_width(intervalMinTick, 2, LV_PART_MAIN);
     lv_obj_set_style_line_color(intervalMinTick, intervalMinColour, LV_PART_MAIN);
 }
+lv_circle_radius
 
 void guiInitDefault(){
     // Set the background color
@@ -267,6 +270,7 @@ void guiInitDefault(){
     //GUI INIT
     readout = lv_label_create( lv_screen_active() );
     lv_label_set_text( readout, "Welcome" );
+    minMaxTickMode = 0;
     lv_obj_align( readout, LV_ALIGN_CENTER, 0, 80);
     lv_obj_set_style_text_color(readout, UIColour, LV_PART_MAIN);
     applyFontStyle(readout, 20);
@@ -311,6 +315,8 @@ void guiInitDigi(){
     lv_obj_set_style_text_color(units, backgroundColour , LV_PART_MAIN);
     applyFontStyle(units, 12);
 }
+
+
 
 void guiInit(){
     switch(UIMode){
@@ -370,8 +376,16 @@ void drawDial(){
     //draw units
     lv_label_set_text(units, unitLabel);
     
-    if(intervalTicks){
+    if(minMaxTickMode > 0){
         drawIntervalTicks();
+    }
+    if(minMaxTickMode == 1){ //red when recording
+        intervalMaxColour = lv_color_hex(0xFF0000)
+        intervalMinColour = lv_color_hex(0xFF0000)
+    } 
+    if(minMaxTickMode == 2){ //yellow when frozen
+        intervalMaxColour = lv_color_hex(0xFFFF00)
+        intervalMinColour = lv_color_hex(0xFFFF00)
     } 
 
     //draw needle

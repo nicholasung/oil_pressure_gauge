@@ -36,6 +36,7 @@ float centreY = LV_VER_RES/2;
 float intervalMax = 0; 
 float intervalMin = maxVal;
 int tickOffset = 180;
+int minMaxTickMode = 0; // 0 = no display, 1 = recording, 2 = frozen. change on tap. always boot in 0 mode, 1 mode shows a red dot to indicate recording
 
 //QMI8658 Access
 SensorQMI8658 qmi;

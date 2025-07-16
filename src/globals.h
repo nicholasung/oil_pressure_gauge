@@ -48,6 +48,7 @@ extern float centreY;
 extern float intervalMax;
 extern float intervalMin;
 extern int tickOffset;
+extern int minMaxTickMode;
 
 
 //QMI8658 Access

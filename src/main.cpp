@@ -26,6 +26,7 @@ extern float intervalMin;
 extern bool intervalTicks;
 extern float nextFrameVal;
 extern bool averageReadings;
+extern int minMaxTickMode;
 
 
 CST816S touch(TOUCH_SDA, TOUCH_SCL, TOUCH_RST, TOUCH_IRQ);
@@ -92,19 +93,27 @@ void loop(){
         updateLabels();
     }
 
-    if(intervalTicks){
+    if(touch.available()){
+        if(minMaxTickMode =< 3){
+            minMaxTickMode = 0;
+        } else {
+            minMaxTickMode++;
+        }
+    }
+
+    if(minMaxTickMode == 1;){
         if(currentVal >= intervalMax){
             intervalMax = currentVal;
         };
         if(currentVal <= intervalMin){
             intervalMin = currentVal;
         };
-        
-        if (touch.available()) { //basically if any form of touch happens
-            //effective reset of interval
-            intervalMax = currentVal;
-            intervalMin = currentVal;
-        }
+    }
+
+    if (minMaxTickMode == 0) {
+        //effective reset of interval
+        intervalMax = currentVal;
+        intervalMin = currentVal;
     }
 
     float ofMax = currentVal / maxVal;
